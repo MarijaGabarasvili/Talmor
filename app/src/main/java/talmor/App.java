@@ -66,8 +66,7 @@ class fileUtils {
 
 	public static void about() {
 		// TODO insert information about authors
-		System.out.println("000RDB000 Jānis Programmētājs");
-		System.out.println("111RDB111 Ilze Programmētāja");
+		System.out.printf("Marija Gabarašvili 17. grupa 221RDB236\nAnastasija Bakalova 17.grupa 221RDB324\nPāvels Pozdejevs 15. grupa 221RDB438\nDmitrijs Astrošaps 10.grupa 221RDB193\nLukas Pahomovs 14. grupa 221RDB047");
 	}
 }
 
@@ -76,14 +75,14 @@ public class App {
 		return "Hello World!";
 	}
 
-	void loop() {
+	String loop(String choise) {
 		Scanner scanner = new Scanner(System.in);
-		String choise;
 		String sourceFile, resultFile, firstFileName, secondFileName;
+		Boolean test = !(choise.equals(""));
 
 		loop: while (true) {
 
-			choise = scanner.next();
+			if (!test) choise=scanner.next();
 
 			switch (choise) {
 				case "comp":
@@ -121,12 +120,17 @@ public class App {
 		}
 
 		scanner.close();
+		return "Run finished successfully";
+	}
+
+	String choise(String choise) {
+		return "";
 	}
 
 	public static void main(String[] args) {
 
 		System.out.println(new App().getGreeting());
-		new App().loop();
+		System.out.println(new App().loop(""));
 
 	}
 
