@@ -9,4 +9,4 @@ Testing using JUnit
 
 ## Usage
 
-Main: app\src\main\java\talmor\App.java
+[Main](app\src\main\java\talmor\App.java)
