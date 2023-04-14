@@ -6,7 +6,6 @@ Project 3
 
 Testing using JUnit
 
-
 ## Usage
 
 Main: app\src\main\java\talmor\App.java
