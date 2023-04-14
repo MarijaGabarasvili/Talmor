@@ -1,9 +1,7 @@
 // 000RDB000 Jānis Programmētājs
 // 111RDB111 Ilze Programmētāja
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Scanner;
+
 
 
 public class Main {
