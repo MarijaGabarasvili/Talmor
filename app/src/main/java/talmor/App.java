@@ -1,66 +1,17 @@
 /*
- * 2
+Marija Gabarašvili 17. grupa 221RDB236
+Anastasija Bakalova 17.grupa 221RDB324
+Pāvels Pozdejevs 15. grupa 221RDB438
+Dmitrijs Astrošaps 10.grupa 221RDB193
+Lukas Pahomovs 14. grupa 221RDB047
  */
 package talmor;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
-    public static void main(String[] args) {
-
-        System.out.println(new App().getGreeting());
-
-		Scanner sc = new Scanner(System.in);
-		String choiseStr;
-		String sourceFile, resultFile, firstFile, secondFile;
-		
-		loop: while (true) {
-			
-			choiseStr = sc.next();
-								
-			switch (choiseStr) {
-			case "comp":
-				System.out.print("source file name: ");
-				sourceFile = sc.next();
-				System.out.print("archive name: ");
-				resultFile = sc.next();
-				comp(sourceFile, resultFile);
-				break;
-			case "decomp":
-				System.out.print("archive name: ");
-				sourceFile = sc.next();
-				System.out.print("file name: ");
-				resultFile = sc.next();
-				decomp(sourceFile, resultFile);
-				break;
-			case "size":
-				System.out.print("file name: ");
-				sourceFile = sc.next();
-				size(sourceFile);
-				break;
-			case "equal":
-				System.out.print("first file name: ");
-				firstFile = sc.next();
-				System.out.print("second file name: ");
-				secondFile = sc.next();
-				System.out.println(equal(firstFile, secondFile));
-				break;
-			case "about":
-				about();
-				break;
-			case "exit":
-				break loop;
-			}
-		}
-
-		sc.close();
-	}
-
-	public static void comp(String sourceFile, String resultFile) {
+class fileUtils{
+    public static void comp(String sourceFile, String resultFile) {
 		// TODO: implement this method
 	}
 
@@ -119,5 +70,65 @@ public class App {
 		System.out.println("000RDB000 Jānis Programmētājs");
 		System.out.println("111RDB111 Ilze Programmētāja");
 	}
+}
+public class App {
+    public String getGreeting() {
+        return "Hello World!";
+    }
+	void loop() {
+		Scanner scanner = new Scanner(System.in);
+		String choiseStr;
+		String sourceFile, resultFile, firstFile, secondFile;
+		
+		loop: while (true) {
+			
+			choiseStr = scanner.next();
+								
+			switch (choiseStr) {
+			case "comp":
+				System.out.print("source file name: ");
+				sourceFile = scanner.next();
+				System.out.print("archive name: ");
+				resultFile = scanner.next();
+				fileUtils.comp(sourceFile, resultFile);
+				break;
+			case "decomp":
+				System.out.print("archive name: ");
+				sourceFile = scanner.next();
+				System.out.print("file name: ");
+				resultFile = scanner.next();
+				fileUtils.decomp(sourceFile, resultFile);
+				break;
+			case "size":
+				System.out.print("file name: ");
+				sourceFile = scanner.next();
+				fileUtils.size(sourceFile);
+				break;
+			case "equal":
+				System.out.print("first file name: ");
+				firstFile = scanner.next();
+				System.out.print("second file name: ");
+				secondFile = scanner.next();
+				System.out.println(fileUtils.equal(firstFile, secondFile));
+				break;
+			case "about":
+            fileUtils.about();
+				break;
+			case "exit":
+				break loop;
+			}
+		}
+
+		scanner.close();
+	}
+
+    public static void main(String[] args) {
+
+        System.out.println(new App().getGreeting());
+		
+		
+	}
+
+	
 
 }
