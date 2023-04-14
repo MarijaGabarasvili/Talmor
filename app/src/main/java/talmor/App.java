@@ -67,11 +67,13 @@ class fileUtils {
 
 	public static void about() {
 		// TODO insert information about authors
-		System.out.printf("Marija Gabarašvili 17. grupa 221RDB236\nAnastasija Bakalova 17.grupa 221RDB324\nPāvels Pozdejevs 15. grupa 221RDB438\nDmitrijs Astrošaps 10.grupa 221RDB193\nLukas Pahomovs 14. grupa 221RDB047");
+		System.out.printf(
+				"Marija Gabarašvili 17. grupa 221RDB236\nAnastasija Bakalova 17.grupa 221RDB324\nPāvels Pozdejevs 15. grupa 221RDB438\nDmitrijs Astrošaps 10.grupa 221RDB193\nLukas Pahomovs 14. grupa 221RDB047");
 	}
 }
+
 class List {
-	LinkedList<Symbol> characterList=new LinkedList<Symbol>();
+	LinkedList<Symbol> characterList = new LinkedList<Symbol>();
 
 	public void add(Symbol symbol) {
 		// TODO: implement this method
@@ -81,23 +83,27 @@ class List {
 class Symbol {
 	char character;
 	int quant;
+
 	public void count() {
 		// TODO: implement this method
 	}
 }
 
 class Tree {
-	LinkedList<Node> tree=new LinkedList<Node>();
+	LinkedList<Node> tree = new LinkedList<Node>();
+
 	public void create(List list) {
-	// TODO: implement this method
+		// TODO: implement this method
 	}
 
 }
+
 class Node {
 	boolean position;
 	int parent;
+
 	public void create() {
-	// TODO: implement this method
+		// TODO: implement this method
 	}
 }
 
@@ -113,7 +119,8 @@ public class App {
 
 		loop: while (true) {
 
-			if (!test) choise=scanner.next();
+			if (!test)
+				choise = scanner.next();
 
 			switch (choise) {
 				case "comp":
