@@ -16,4 +16,10 @@ class AppTest {
         App classUnderTest = new App();
         assertNotNull(classUnderTest.loop("exit"), "app should have a choise");
     }
+
+    @Test void appAboutWorks (){
+        App classUnderTest = new App();
+        assertFalse(classUnderTest.loop("about").equals(""), "app should have about");
+
+    }
 }
