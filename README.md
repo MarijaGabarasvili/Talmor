@@ -22,3 +22,23 @@ JavaFX None yet, but will be added soon
 ### Linux
 
 ./gradlew
+
+## Usage
+
+### Windows
+
+.\gradlew.bat run
+
+### Linux
+
+./gradlew run
+
+## Miscellanous
+
+Main.java:
+[(Linux)](src/main/java/Main.java)
+[(Windows)](src\main\java\Main.java)
+
+test.java:
+[(Linux)](src/test/java/test.java)
+[(Windows)](src\test\java\test.java)
