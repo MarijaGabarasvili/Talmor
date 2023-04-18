@@ -17,20 +17,22 @@ JavaFX None yet, but will be added soon
 
 ### Windows
 
-.\gradlew.bat
+```.\gradlew.bat```
 
-### Linux
+or
 
-./gradlew
+```./gradlew```
 
 ## Usage
 
-.\gradlew.bat run
+```.\gradlew.bat run```
 
-./gradlew run
+or
+
+```./gradlew run```
 
 ## Miscellaneus
 
-[Main.java:](src/main/java/Main.java)
+[Main.java](src/main/java/Main.java)
 
-[test.java:](src/test/java/test.java)
+[test.java](src/test/java/test.java)
