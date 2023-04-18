@@ -22,8 +22,3 @@ JavaFX None yet, but will be added soon
 ### Linux
 
 ./gradlew
-
-## Main location
-
-[Main](app\src\main\java\talmor\App.java)
-[Main(Linux)](app/src/main/java/talmor/App.java)
