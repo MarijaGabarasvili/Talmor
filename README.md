@@ -35,6 +35,6 @@ JavaFX None yet, but will be added soon
 
 ## Miscellaneus
 
-[Main.java:](src/main/java/Main.java)
+[Main.java](src/main/java/Main.java)
 
-[test.java:](src/test/java/test.java)
+[test.java](src/test/java/test.java)
