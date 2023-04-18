@@ -177,13 +177,16 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
+        //gui version
         launch(args);
 
-        try {
-            System.out.println(loop(""));
-        } catch (Exception exeption) {
-            System.out.println(exeption.getMessage());
-        }
+
+        //terminal version
+        // try {
+        //     System.out.println(loop(""));
+        // } catch (Exception exeption) {
+        //     System.out.println(exeption.getMessage());
+        // }
 
     }
 
