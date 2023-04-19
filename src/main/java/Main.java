@@ -29,7 +29,14 @@ public class Main extends Application {
             String sourceFileName = scanner.next();
             System.out.print("archive name: ");
             String resultFileName = scanner.next();
+
+            comp(sourceFileName, resultFileName);
+        }
+
+        public static String comp(String sourceFileName, String resultFileName) {
             // TODO: implement this method
+            // it needs to return Compressed successfully or Failed to compress
+            return "unimplemented";
         }
 
         public static void decomp(Scanner scanner) {
@@ -37,7 +44,13 @@ public class Main extends Application {
             String sourceFileName = scanner.next();
             System.out.print("file name: ");
             String resultFileName = scanner.next();
+            decomp(sourceFileName, resultFileName);
+        }
+
+        public static String decomp(String sourceFileName, String resultFileName) {
             // TODO: implement this method
+            // it needs to return Decompressed successfully or Failed to decompress
+            return "unimplemented";
         }
 
         public static String size(Scanner scanner) {
@@ -51,10 +64,10 @@ public class Main extends Application {
         }
 
         public static String size(String sourceFileName) throws IOException {
-                FileInputStream sourceFile = new FileInputStream(sourceFileName);
+            FileInputStream sourceFile = new FileInputStream(sourceFileName);
             String result = Integer.toString(sourceFile.available());
-                sourceFile.close();
-                return result;
+            sourceFile.close();
+            return result;
 
         }
 
@@ -94,14 +107,13 @@ public class Main extends Application {
                 firstFile.close();
                 secondFile.close();
                 return true;
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
+            } catch (IOException exeption) {
+                System.out.println(exeption.getMessage());
                 return false;
             }
         }
 
         public static String about() {
-            // TODO insert information about authors
             return "Marija Gabarašvili 17. grupa 221RDB236\nAnastasija Bakalova 17.grupa 221RDB324\nPāvels Pozdejevs 15. grupa 221RDB438\nDmitrijs Astrošaps 10.grupa 221RDB193\nLukas Pahomovs 14. grupa 221RDB047";
         }
     }
@@ -130,27 +142,30 @@ public class Main extends Application {
             // this.tree.add(new Node(false, -1, lists.characterlist.get(0)));
             // int j = 0;
             // for (int i = 1; i < lists.characterlist.size(); i++) {
-            //     if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
+            // if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
 
-            //         this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+            // this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
 
-            //         this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
-            //         j = j + 1;
-            //     } else {
+            // this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
+            // j = j + 1;
+            // } else {
 
-            //         this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+            // this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
 
-            //         this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
-            //         j = j + 1;
-            //     }
+            // this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
+            // j = j + 1;
+            // }
 
-            //     this.tree.add(new Node(false, -1,
-            //             new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j - 1).sym.quant)));
+            // this.tree.add(new Node(false, -1,
+            // new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
+            // 1).sym.quant)));
 
-            //     this.tree.set(j, new Node(this.tree.get(j).position, j + 1, this.tree.get(j).sym));
+            // this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
+            // this.tree.get(j).sym));
 
-            //     this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1, this.tree.get(j - 1).sym));
-            //     j = j + 1;
+            // this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
+            // this.tree.get(j - 1).sym));
+            // j = j + 1;
             // }
 
         }
@@ -239,18 +254,17 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        //gui version
+        // gui version
         launch(args);
 
-
-        //terminal version
+        // terminal version
         // try {
-        //     System.out.println(loop(""));
+        // System.out.println(loop(""));
         // } catch (Exception exeption) {
-        //     System.out.println(exeption.getMessage());
+        // System.out.println(exeption.getMessage());
         // }
 
-        }
+    }
 
     class File {
         public String size;
@@ -265,7 +279,7 @@ public class Main extends Application {
         File activeFile = new File();
         File secondaryFile = new File();
 
-        String statisticsPlaceholder="Name: N/A\nExtension: N/A\nSize: N/A bytes\nPath: N/A";
+        String statisticsPlaceholder = "Name: N/A\nExtension: N/A\nSize: N/A bytes\nPath: N/A";
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(40, 10, 10, 10));
@@ -274,7 +288,7 @@ public class Main extends Application {
 
         Label activeFileLabel = new Label("Active file");
         activeFileLabel.setTextFill(Color.web("#c2ebff"));
-        activeFileLabel.setFont(Font.font( 20));
+        activeFileLabel.setFont(Font.font(20));
         GridPane.setConstraints(activeFileLabel, 0, 0);
         grid.getChildren().add(activeFileLabel);
 
@@ -290,11 +304,11 @@ public class Main extends Application {
 
         Label secondaryFileLabel = new Label("Secondary file");
         secondaryFileLabel.setTextFill(Color.web("#c2ebff"));
-        secondaryFileLabel.setFont(Font.font( 20));
+        secondaryFileLabel.setFont(Font.font(20));
         GridPane.setConstraints(secondaryFileLabel, 1, 0);
         grid.getChildren().add(secondaryFileLabel);
 
-        Text secondaryFileStatistics = new Text( statisticsPlaceholder);
+        Text secondaryFileStatistics = new Text(statisticsPlaceholder);
         secondaryFileStatistics.setFill(Color.web("#c2ebff"));
         GridPane.setConstraints(secondaryFileStatistics, 1, 1);
         grid.getChildren().add(secondaryFileStatistics);
@@ -303,6 +317,11 @@ public class Main extends Application {
         secondaryFileField.setPromptText("Secondary file path");
         GridPane.setConstraints(secondaryFileField, 1, 2);
         grid.getChildren().add(secondaryFileField);
+
+        Text equality = new Text("Files are not equal");
+        equality.setFill(Color.web("#c2ebff"));
+        GridPane.setConstraints(equality, 2, 1);
+        grid.getChildren().add(equality);
 
         ToolBar toolBar = new ToolBar();
 
@@ -313,26 +332,13 @@ public class Main extends Application {
 
         toolBar.getItems().add(new Separator());
 
-        Button sizeButton = new Button("Refresh statistics");
-        toolBar.getItems().add(sizeButton);
-
-        Button checkButton = new Button("Check files equality");
-        toolBar.getItems().add(checkButton);
+        Button statisticsButton = new Button("Refresh statistics");
+        toolBar.getItems().add(statisticsButton);
 
         toolBar.getItems().add(new Separator());
 
         Button aboutButton = new Button("Credits");
         toolBar.getItems().add(aboutButton);
-        Alert alert = new Alert(AlertType.NONE);
-
-        aboutButton.setOnAction(actionEvent -> {
-            // System.out.println(fileUtils.about());
-            alert.setAlertType(AlertType.INFORMATION);
-            alert.setContentText(fileUtils.about());
-            alert.setTitle("Credits");
-            alert.setHeaderText("Authors:");
-            alert.show();
-        });
 
         toolBar.getItems().add(new Separator());
 
@@ -342,6 +348,40 @@ public class Main extends Application {
         // Setting Title to the stage
         primaryStage.setTitle("Talmor compressor");
         // Displaying the contents of the stage
+
+        compileButton.setOnAction(actionEvent -> {
+            if (!activeFileField.getText().equals("")) {
+                try {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                            fileUtils.comp(activeFileField.getText(),
+                                    secondaryFileField.getText().equals("") ? activeFileField.getText() + ".talmor"
+                                            : secondaryFileField.getText()));
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                } catch (Exception exeption) {
+                    exeption.printStackTrace();
+                }
+            }
+        });
+
+        decompileButton.setOnAction(actionEvent -> {
+            if (!activeFileField.getText().equals("")) {
+                try {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                            fileUtils.decomp(activeFileField.getText(),
+                                    secondaryFileField.getText().equals("")
+                                            ? activeFileField.getText().contains(".talmor")
+                                                    ? activeFileField.getText().substring(0,
+                                                            activeFileField.getText().length() - 7)
+                                                    : activeFileField.getText()
+                                            : secondaryFileField.getText()));
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
 
         activeFileField.setOnKeyPressed(actionEvent -> {
             if (actionEvent.getCode() == KeyCode.ENTER) {
@@ -357,20 +397,28 @@ public class Main extends Application {
             }
         });
 
-        sizeButton.setOnAction(actionEvent -> {
+        statisticsButton.setOnAction(actionEvent -> {
             // System.out.println(fileUtils.size(activeFile.path));
             refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
             refresh(secondaryFile, secondaryFileStatistics, statisticsPlaceholder, secondaryFileField.getText());
+            try {
+                equality.setText(
+                        (!activeFileField.getText().equals("") && !secondaryFileField.getText().equals(""))
+                                ? fileUtils.equal(activeFile.path, secondaryFile.path) ? "Files are equal"
+                                        : "Files are not equal"
+                                : "Files are not equal");
+            } catch (Exception e) {
+                new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
+            }
             primaryStage.sizeToScene();
-            
+
         });
 
         aboutButton.setOnAction(actionEvent -> {
-            // System.out.println(fileUtils.about());
-            alert.setAlertType(AlertType.INFORMATION);
+            Alert alert = new Alert(AlertType.INFORMATION);
             alert.setContentText(fileUtils.about());
             alert.setTitle("Credits");
-            alert.setHeaderText("Authors:");
+            alert.setHeaderText(null);
             alert.show();
         });
 
@@ -380,21 +428,21 @@ public class Main extends Application {
             System.exit(0);
         });
 
-
         primaryStage.show();
     }
 
-    static void refresh(File file, Text fileStatistics, String statisticsPlaceholder, String path){
-        file: try {
-            if (path.equals("")){
+    static void refresh(File file, Text fileStatistics, String statisticsPlaceholder, String path) {
+        try {
+            if (path.equals("")) {
                 fileStatistics.setText(statisticsPlaceholder);
-                break file;
+                return;
             }
             file.path = path;
             file.size = fileUtils.size(path);
             if (!path.contains("."))
                 file.extension = "N/A";
-            else file.extension = path.substring(path.lastIndexOf(".") + 1);
+            else
+                file.extension = path.substring(path.lastIndexOf(".") + 1);
             try {
                 file.name = path.substring(path.lastIndexOf("\\") + 1);
                 file.name = file.name.substring(0, file.name.lastIndexOf("."));
@@ -404,11 +452,12 @@ public class Main extends Application {
             fileStatistics.setText("Name: " + file.name + "\nExtension: " + file.extension
                     + "\nSize: " + file.size + " bytes" + "\nPath: " + file.path);
 
-            
-            
+            return;
+
         } catch (Exception exeption) {
             new Alert(AlertType.ERROR, exeption.getMessage()).showAndWait();
+            return;
         }
-        
+
     }
 }
