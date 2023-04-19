@@ -1,6 +1,7 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import javafx.application.Application;
@@ -18,6 +19,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 
 public class Main extends Application {
@@ -49,10 +51,10 @@ public class Main extends Application {
         }
 
         public static String size(String sourceFileName) throws IOException {
-            FileInputStream sourceFile = new FileInputStream(sourceFileName);
+                FileInputStream sourceFile = new FileInputStream(sourceFileName);
             String result = Integer.toString(sourceFile.available());
-            sourceFile.close();
-            return result;
+                sourceFile.close();
+                return result;
 
         }
 
@@ -124,18 +126,78 @@ public class Main extends Application {
     class Tree {
         LinkedList<Node> tree = new LinkedList<Node>();
 
-        public void create(List list) {
-            // TODO: implement this method
+        public void create(List lists) {
+            // this.tree.add(new Node(false, -1, lists.characterlist.get(0)));
+            // int j = 0;
+            // for (int i = 1; i < lists.characterlist.size(); i++) {
+            //     if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
+
+            //         this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+
+            //         this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
+            //         j = j + 1;
+            //     } else {
+
+            //         this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+
+            //         this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
+            //         j = j + 1;
+            //     }
+
+            //     this.tree.add(new Node(false, -1,
+            //             new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j - 1).sym.quant)));
+
+            //     this.tree.set(j, new Node(this.tree.get(j).position, j + 1, this.tree.get(j).sym));
+
+            //     this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1, this.tree.get(j - 1).sym));
+            //     j = j + 1;
+            // }
+
+        }
+
+        public HashMap<Character, String> toMap() {
+            HashMap<Character, String> map = new HashMap<Character, String>();
+            for (int i = 0; i < this.tree.size(); i++) {
+                String code = "";
+                int j = i;
+                if (this.tree.get(i).sym.character != '\0') {
+                    do {
+                        if (this.tree.get(j).position) {
+                            code = code + "1";
+                        } else {
+                            code = code + "0";
+                        }
+                        j = this.tree.get(j).parent;
+                    } while (this.tree.get(j).parent != -1);
+
+                    String codeFin = "";
+                    for (int k = code.length() - 1; k >= 0; k--) {
+                        codeFin = codeFin + code.charAt(k);
+                    }
+                    map.put(this.tree.get(i).sym.character, codeFin);
+                }
+
+            }
+
+            return map;
         }
 
     }
 
     class Node {
-        boolean position;
-        int parent;
+        boolean position; // false-left true-right
+        int parent; // no parent, then -1
+        Symbol sym;
 
-        public void create() {
-            // TODO: implement this method
+        public Node(boolean pos, int p, Symbol s) {
+            this.position = pos;
+            this.parent = p;
+            this.sym = s;
+        }
+
+        public void print() {
+            System.out.println(
+                    this.position + " " + this.parent + " " + this.sym.character + " " + this.sym.quant + " aaa ");
         }
     }
 
@@ -188,9 +250,9 @@ public class Main extends Application {
         //     System.out.println(exeption.getMessage());
         // }
 
-    }
+        }
 
-    class file {
+    class File {
         public String size;
         public String name;
         public String path;
@@ -200,8 +262,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        file activeFile = new file();
-        file secondaryFile = new file();
+        File activeFile = new File();
+        File secondaryFile = new File();
+
+        String statisticsPlaceholder="Name: N/A\nExtension: N/A\nSize: N/A bytes\nPath: N/A";
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(40, 10, 10, 10));
@@ -214,16 +278,31 @@ public class Main extends Application {
         GridPane.setConstraints(activeFileLabel, 0, 0);
         grid.getChildren().add(activeFileLabel);
 
-        Text activeFileStatistics = new Text(10, 40, "Stats will be here");
+        Text activeFileStatistics = new Text(statisticsPlaceholder);
         activeFileStatistics.setFill(Color.web("#c2ebff"));
-
         GridPane.setConstraints(activeFileStatistics, 0, 1);
         grid.getChildren().add(activeFileStatistics);
 
         TextField activeFileField = new TextField();
-        activeFileField.setPromptText("Active file");
+        activeFileField.setPromptText("Active file path");
         GridPane.setConstraints(activeFileField, 0, 2);
         grid.getChildren().add(activeFileField);
+
+        Label secondaryFileLabel = new Label("Secondary file");
+        secondaryFileLabel.setTextFill(Color.web("#c2ebff"));
+        secondaryFileLabel.setFont(Font.font( 20));
+        GridPane.setConstraints(secondaryFileLabel, 1, 0);
+        grid.getChildren().add(secondaryFileLabel);
+
+        Text secondaryFileStatistics = new Text( statisticsPlaceholder);
+        secondaryFileStatistics.setFill(Color.web("#c2ebff"));
+        GridPane.setConstraints(secondaryFileStatistics, 1, 1);
+        grid.getChildren().add(secondaryFileStatistics);
+
+        TextField secondaryFileField = new TextField();
+        secondaryFileField.setPromptText("Secondary file path");
+        GridPane.setConstraints(secondaryFileField, 1, 2);
+        grid.getChildren().add(secondaryFileField);
 
         ToolBar toolBar = new ToolBar();
 
@@ -236,21 +315,6 @@ public class Main extends Application {
 
         Button sizeButton = new Button("Refresh statistics");
         toolBar.getItems().add(sizeButton);
-
-        sizeButton.setOnAction(actionEvent -> {
-            // System.out.println(fileUtils.size(activeFile.path));
-            try {
-                activeFile.path = activeFileField.getText();
-                activeFile.size = fileUtils.size(activeFile.path);
-                activeFile.extension = activeFile.path.substring(activeFile.path.lastIndexOf(".") + 1);
-                activeFile.name = activeFile.path.substring(activeFile.path.lastIndexOf("\\") + 1);
-                activeFile.name = activeFile.name.substring(0, activeFile.name.lastIndexOf("."));
-                activeFileStatistics.setText("Name: " + activeFile.name + "\nExtension: " + activeFile.extension
-                        + "\nSize: " + activeFile.size + " bytes" + "\nPath: " + activeFile.path);
-            } catch (Exception exeption) {
-                activeFileStatistics.setText("Error: " + exeption.getMessage());
-            }
-        });
 
         Button checkButton = new Button("Check files equality");
         toolBar.getItems().add(checkButton);
@@ -272,18 +336,79 @@ public class Main extends Application {
 
         toolBar.getItems().add(new Separator());
 
+        Group root = new Group(toolBar, grid);
+        Scene scene = new Scene(root, Color.web("#416573"));
+        primaryStage.setScene(scene);
+        // Setting Title to the stage
+        primaryStage.setTitle("Talmor compressor");
+        // Displaying the contents of the stage
+
+        activeFileField.setOnKeyPressed(actionEvent -> {
+            if (actionEvent.getCode() == KeyCode.ENTER) {
+                refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
+                primaryStage.sizeToScene();
+            }
+        });
+
+        secondaryFileField.setOnKeyPressed(actionEvent -> {
+            if (actionEvent.getCode() == KeyCode.ENTER) {
+                refresh(secondaryFile, secondaryFileStatistics, statisticsPlaceholder, secondaryFileField.getText());
+                primaryStage.sizeToScene();
+            }
+        });
+
+        sizeButton.setOnAction(actionEvent -> {
+            // System.out.println(fileUtils.size(activeFile.path));
+            refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
+            refresh(secondaryFile, secondaryFileStatistics, statisticsPlaceholder, secondaryFileField.getText());
+            primaryStage.sizeToScene();
+            
+        });
+
+        aboutButton.setOnAction(actionEvent -> {
+            // System.out.println(fileUtils.about());
+            alert.setAlertType(AlertType.INFORMATION);
+            alert.setContentText(fileUtils.about());
+            alert.setTitle("Credits");
+            alert.setHeaderText("Authors:");
+            alert.show();
+        });
+
         Button exitButton = new Button("Exit");
         toolBar.getItems().add(exitButton);
         exitButton.setOnAction(actionEvent -> {
             System.exit(0);
         });
 
-        Group root = new Group(toolBar, grid);
-        Scene scene = new Scene(root, 545, 200, Color.web("#416573"));
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Talmor compressor");
-        primaryStage.show();
 
+        primaryStage.show();
     }
 
+    static void refresh(File file, Text fileStatistics, String statisticsPlaceholder, String path){
+        file: try {
+            if (path.equals("")){
+                fileStatistics.setText(statisticsPlaceholder);
+                break file;
+            }
+            file.path = path;
+            file.size = fileUtils.size(path);
+            if (!path.contains("."))
+                file.extension = "N/A";
+            else file.extension = path.substring(path.lastIndexOf(".") + 1);
+            try {
+                file.name = path.substring(path.lastIndexOf("\\") + 1);
+                file.name = file.name.substring(0, file.name.lastIndexOf("."));
+            } catch (Exception exception) {
+                file.name = path;
+            }
+            fileStatistics.setText("Name: " + file.name + "\nExtension: " + file.extension
+                    + "\nSize: " + file.size + " bytes" + "\nPath: " + file.path);
+
+            
+            
+        } catch (Exception exeption) {
+            new Alert(AlertType.ERROR, exeption.getMessage()).showAndWait();
+        }
+        
+    }
 }
