@@ -24,6 +24,15 @@ import javafx.scene.layout.GridPane;
 
 public class Main extends Application {
     class fileUtils {
+
+        static String read(String fileName) throws IOException {
+            FileInputStream file = new FileInputStream(fileName);
+            byte[] buffer = new byte[file.available()];
+            file.read(buffer, 0, file.available());
+            file.close();
+            return new String(buffer);
+        }
+
         public static void comp(Scanner scanner) {
             System.out.print("source file name: ");
             String sourceFileName = scanner.next();
@@ -130,8 +139,12 @@ public class Main extends Application {
         char character;
         int quant;
 
-        public void count() {
-            // TODO: implement this method
+        public void count(String file) {
+            for (int index = 0; index < file.length(); index++) {
+                if (file.charAt(index) == this.character) {
+                    this.quant++;
+                }
+            }
         }
     }
 
