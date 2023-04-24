@@ -157,34 +157,33 @@ public class Main extends Application {
 		LinkedList<Node> tree = new LinkedList<Node>();
 
         public void create(List lists) {
-            this.tree.add(new Node(false, -1, lists.characterlist.get(0)));
-            int j = 0;
-            for (int i = 1; i < lists.characterlist.size(); i++) {
-             if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
+            // this.tree.add(new Node(false, -1, lists.characterlist.get(0)));
+            // int j = 0;
+            // for (int i = 1; i < lists.characterlist.size(); i++) {
+            //  if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
 
-            this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+            // this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
 
-            this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
-            j = j + 1;
-            } else {
+            // this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
+            // j = j + 1;
+            // } else {
 
-            this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+            // this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
 
-             this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
-            j = j + 1;
-            }
+            //  this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
+            // j = j + 1;
+            // }
 
-            this.tree.add(new Node(false, -1,
-            new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
-            1).sym.quant)));
+            // this.tree.add(new Node(false, -1,
+            // new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j - 1).sym.quant)));
 
-            this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
-            this.tree.get(j).sym));
+            // this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
+            // this.tree.get(j).sym));
 
-            this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
-            this.tree.get(j - 1).sym));
-            j = j + 1;
-            }
+            // this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
+            // this.tree.get(j - 1).sym));
+            // j = j + 1;
+            // }
 
         }
 
