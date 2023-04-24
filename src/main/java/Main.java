@@ -33,6 +33,10 @@ public class Main extends Application {
             return new String(buffer);
         }
 
+        static void write(String fileName,String file){
+            // TODO: implement this method
+        }
+
         public static void comp(Scanner scanner) {
             System.out.print("source file name: ");
             String sourceFileName = scanner.next();
@@ -135,20 +139,21 @@ public class Main extends Application {
         }
     }
 
-    class Symbol {
+    static class Symbol {
         char character;
         int quant;
 
-        public void count(String file) {
+        public Integer count(String file) {
             for (int index = 0; index < file.length(); index++) {
                 if (file.charAt(index) == this.character) {
                     this.quant++;
                 }
             }
+            return this.quant;
         }
     }
 
-    class Tree {
+    static class Tree {
         LinkedList<Node> tree = new LinkedList<Node>();
 
         public void create(List lists) {
@@ -212,7 +217,7 @@ public class Main extends Application {
 
     }
 
-    class Node {
+    static class Node {
         boolean position; // false-left true-right
         int parent; // no parent, then -1
         Symbol sym;
