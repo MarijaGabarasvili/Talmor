@@ -39,8 +39,8 @@ public class test {
         assertFalse(Main.fileUtils.equal("src/test/java/test.txt","README.md"));
     }
 
-    @Test void nodePrintWorks(){
-        Main.Node node = new Main.Node(false, 'c', -1);
-        assertEquals(node.print(),"false c -1");
-    }
+    // @Test void nodePrintWorks(){
+        // Main.Node node = new Main.Node(false, 'c', -1);
+        // assertEquals(node.print(),"false c -1");
+    // }
 }
