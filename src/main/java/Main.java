@@ -136,73 +136,72 @@ public class Main extends Application {
     }
 
     class Tree {
-        LinkedList<Node> tree = new LinkedList<Node>();
+		LinkedList<Node> tree = new LinkedList<Node>();
 
         public void create(List lists) {
-            // this.tree.add(new Node(false, -1, lists.characterlist.get(0)));
-            // int j = 0;
-            // for (int i = 1; i < lists.characterlist.size(); i++) {
-            // if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
+            this.tree.add(new Node(false, -1, lists.characterlist.get(0)));
+            int j = 0;
+            for (int i = 1; i < lists.characterlist.size(); i++) {
+             if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
 
-            // this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+            this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
 
-            // this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
-            // j = j + 1;
-            // } else {
+            this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
+            j = j + 1;
+            } else {
 
-            // this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+            this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
 
-            // this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
-            // j = j + 1;
-            // }
-
-            // this.tree.add(new Node(false, -1,
-            // new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
-            // 1).sym.quant)));
-
-            // this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
-            // this.tree.get(j).sym));
-
-            // this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
-            // this.tree.get(j - 1).sym));
-            // j = j + 1;
-            // }
-
-        }
-
-        public HashMap<Character, String> toMap() {
-            HashMap<Character, String> map = new HashMap<Character, String>();
-            for (int i = 0; i < this.tree.size(); i++) {
-                String code = "";
-                int j = i;
-                if (this.tree.get(i).sym.character != '\0') {
-                    do {
-                        if (this.tree.get(j).position) {
-                            code = code + "1";
-                        } else {
-                            code = code + "0";
-                        }
-                        j = this.tree.get(j).parent;
-                    } while (this.tree.get(j).parent != -1);
-
-                    String codeFin = "";
-                    for (int k = code.length() - 1; k >= 0; k--) {
-                        codeFin = codeFin + code.charAt(k);
-                    }
-                    map.put(this.tree.get(i).sym.character, codeFin);
-                }
-
+             this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
+            j = j + 1;
             }
 
-            return map;
+            this.tree.add(new Node(false, -1,
+            new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
+            1).sym.quant)));
+
+            this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
+            this.tree.get(j).sym));
+
+            this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
+            this.tree.get(j - 1).sym));
+            j = j + 1;
+            }
+
         }
 
-    }
+  public HashMap<Character, String> toMap(){
+    HashMap<Character, String> map = new HashMap<Character, String>();
+    for (int i = 0; i<this.tree.size(); i++){
+      String code="";
+      int j=i;
+      if(this.tree.get(i).sym.character!='\0'){
+        do{
+            if(this.tree.get(j).position){
+                code=code+"1";
+            }else{
+                code=code+"0";
+            }
+            j=this.tree.get(j).parent;
+        }while(this.tree.get(j).parent!=-1);
 
-    class Node {
-        boolean position; // false-left true-right
-        int parent; // no parent, then -1
-        Symbol sym;
+        String codeFin="";
+        for(int k=code.length()-1; k>=0;k--){
+            codeFin=codeFin+code.charAt(k);
+        }
+        map.put(this.tree.get(i).sym.character, codeFin);
+      }
+      
+    }
+    return map;
+  }
+	
+}
+
+class Node {
+    boolean position; //false-left true-right
+    int parent; //no parent, then -1
+    Symbol sym;
 
         public Node(boolean pos, int p, Symbol s) {
             this.position = pos;
@@ -210,11 +209,10 @@ public class Main extends Application {
             this.sym = s;
         }
 
-        public void print() {
-            System.out.println(
-                    this.position + " " + this.parent + " " + this.sym.character + " " + this.sym.quant + " aaa ");
+        public void print(){
+          System.out.println(this.position+" "+this.parent+" "+this.sym.character+" "+this.sym.quant+" aaa ");
         }
-    }
+}
 
     static String loop(String choise) {
         Scanner scanner = new Scanner(System.in);
