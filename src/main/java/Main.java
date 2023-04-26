@@ -33,9 +33,8 @@ public class Main extends Application {
             file.close();
             return new String(buffer);
         }
-
+        // 
         static void write(String fileName, String file) {
-            // TODO: implement this method
             try {
                 FileWriter fw = new FileWriter(fileName);
                 fw.write(file + "\n");
