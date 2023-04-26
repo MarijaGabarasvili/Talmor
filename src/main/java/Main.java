@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.io.File;
+import java.io.FileReader;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -35,7 +37,14 @@ public class Main extends Application {
 
         static void write(String fileName,String file){
             // TODO: implement this method
-        }
+	try {
+		File file = new File(fileName);            
+		FileWriter fw = new FileWriter(file);               
+		fw.write(file + "\n");
+		fw.close();
+       		} catch (Exception e) { System.out.println(e);  
+	    }
+	}
 
         public static void comp(Scanner scanner) {
             System.out.print("source file name: ");
