@@ -4,6 +4,9 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.io.FileWriter;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -26,14 +29,20 @@ import javafx.scene.layout.GridPane;
 public class Main extends Application {
     class fileUtils {
 
-        static String read(String fileName) throws IOException {
-            FileInputStream file = new FileInputStream(fileName);
-            byte[] buffer = new byte[file.available()];
-            file.read(buffer, 0, file.available());
-            file.close();
-            return new String(buffer);
+        static String read(String fileName){
+            try{
+                FileInputStream file = new FileInputStream(fileName);
+                byte[] buffer = new byte[file.available()];
+                file.read(buffer, 0, file.available());
+                file.close();
+                return new String(buffer);
+            }catch(Exception e){
+                System.out.println(e);
+                return e.getMessage();
+            }
         }
-        // 
+
+        //
         static void write(String fileName, String file) {
             try {
                 FileWriter fw = new FileWriter(fileName);
@@ -54,6 +63,23 @@ public class Main extends Application {
         }
 
         public static String comp(String sourceFileName, String resultFileName) {
+            StringBuilder sb = new StringBuilder();
+
+            ByteBuffer sb1 = ByteBuffer.allocate(sb.length());
+            for (int i = 0; i < sb.length(); i += 8) {
+                if (i + 8 > sb.length()) {
+                    String strii = sb.substring(i, sb.length());
+                    sb1.put((byte) Integer.parseInt(strii, 2));
+                } else {
+                    String strii = sb.substring(i, i + 8);
+                    sb1.put((byte) Integer.parseInt(strii, 2));
+                }
+
+            }
+            sb1.rewind();
+            Charset cs = Charset.forName("UTF-8");
+            CharBuffer cb = cs.decode(sb1);
+            write(resultFileName, cb.toString());
             // TODO: implement this method
             // it needs to return Compressed successfully or Failed to compress
             return "unimplemented";
@@ -69,8 +95,25 @@ public class Main extends Application {
 
         public static String decomp(String sourceFileName, String resultFileName) {
             // TODO: implement this method
-            // it needs to return Decompressed successfully or Failed to decompress
+            String text = read(sourceFileName);
+            ASCIIToBin(text);
+            
+            
+            
+
             return "unimplemented";
+        }
+        public static String ASCIIToBin(String ASCII) {
+            byte[] bytes = ASCII.toString().getBytes();
+            StringBuilder binary = new StringBuilder();
+            for (byte b : bytes) {
+                int val = b;
+                for (int i = 0; i < 8; i++) {
+                    binary.append((val & 128) == 0 ? 0 : 1);
+                    val <<= 1;
+                }
+            }
+            return binary.toString();
         }
 
         public static String size(Scanner scanner) {
