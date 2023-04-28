@@ -29,14 +29,14 @@ import javafx.scene.layout.GridPane;
 public class Main extends Application {
     class fileUtils {
 
-        static String read(String fileName){
-            try{
+        static String read(String fileName) {
+            try {
                 FileInputStream file = new FileInputStream(fileName);
                 byte[] buffer = new byte[file.available()];
                 file.read(buffer, 0, file.available());
                 file.close();
                 return new String(buffer);
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
                 return e.getMessage();
             }
@@ -96,11 +96,9 @@ public class Main extends Application {
             String text = read(sourceFileName);
             ASCIIToBin(text);
 
-            
-            
-
             return "unimplemented";
         }
+
         public static String ASCIIToBin(String ASCII) {
             byte[] bytes = ASCII.toString().getBytes();
             StringBuilder binary = new StringBuilder();
@@ -181,6 +179,7 @@ public class Main extends Application {
 
     class List {
         LinkedList<Symbol> characterList = new LinkedList<Symbol>();
+
         public void add(Symbol symbol) {
             characterList.add(symbol);
         }
@@ -226,11 +225,11 @@ public class Main extends Application {
     static class Symbol {
         char character;
         int quant;
-        
-        public Symbol(char c,int q){
+
+        public Symbol(char c, int q) {
             this.character = c;
             this.quant = q;
-          }
+        }
 
         public Integer count(String file) {
             for (int index = 0; index < file.length(); index++) {
@@ -246,32 +245,33 @@ public class Main extends Application {
         LinkedList<Node> tree = new LinkedList<Node>();
 
         public void create(List lists) {
-            this.tree.add(new Node(false,-1,lists.characterList.get(0)));
-            int j=0;
-                  for(int i=1; i<lists.characterList.size();i++){
-              if(this.tree.get(j).sym.quant<lists.characterList.get(i).quant){
-                
-                this.tree.set(j,new Node(false,-1,this.tree.get(j).sym));
-                
-                this.tree.add(new Node(true, -1, lists.characterList.get(i)));
-                j=j+1;
-              }else{
-                
-                this.tree.set(j, new Node(true,-1,this.tree.get(j).sym));
-                
-                this.tree.add(new Node(false, -1, lists.characterList.get(i)));
-                j=j+1;
-              }
-              
-              this.tree.add(new Node(false, -1, new Symbol('\0' ,this.tree.get(j).sym.quant+this.tree.get(j-1).sym.quant)));
-              
-              this.tree.set(j, new Node(this.tree.get(j).position, j+1, this.tree.get(j).sym));
-              
-              this.tree.set(j-1, new Node(this.tree.get(j-1).position, j+1, this.tree.get(j-1).sym));
-              j=j+1;
+            this.tree.add(new Node(false, -1, lists.characterList.get(0)));
+            int j = 0;
+            for (int i = 1; i < lists.characterList.size(); i++) {
+                if (this.tree.get(j).sym.quant < lists.characterList.get(i).quant) {
+
+                    this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+
+                    this.tree.add(new Node(true, -1, lists.characterList.get(i)));
+                    j = j + 1;
+                } else {
+
+                    this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+
+                    this.tree.add(new Node(false, -1, lists.characterList.get(i)));
+                    j = j + 1;
+                }
+
+                this.tree.add(new Node(false, -1,
+                        new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j - 1).sym.quant)));
+
+                this.tree.set(j, new Node(this.tree.get(j).position, j + 1, this.tree.get(j).sym));
+
+                this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1, this.tree.get(j - 1).sym));
+                j = j + 1;
             }
-      
-          }
+
+        }
 
         public HashMap<Character, String> toMap() {
             HashMap<Character, String> map = new HashMap<Character, String>();
