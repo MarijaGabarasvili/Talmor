@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.io.File;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -42,7 +43,14 @@ public class Main extends Application {
 
         //
         static void write(String fileName, String file) {
+            
             try {
+                File file1 = new File(fileName);
+                if (file1.createNewFile()) {
+                    System.out.println("File created: " + file1.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
                 FileWriter fw = new FileWriter(fileName);
                 fw.write(file);
                 fw.close();
@@ -63,6 +71,7 @@ public class Main extends Application {
         public static String comp(String sourceFileName, String resultFileName) {
             String file = read(sourceFileName);
             List listFile = new List(file);
+            listFile.sort();
             Tree treeFile = new Tree(listFile);
             HashMap<Character, String> map = treeFile.toMap();
             String fileByte = "";
@@ -84,9 +93,23 @@ public class Main extends Application {
             fileByte1.rewind();
             Charset cs = Charset.forName("UTF-8");
             CharBuffer cb = cs.decode(fileByte1);
+            System.out.println(cb.toString());
             write(resultFileName, cb.toString());
             // it needs to return Compressed successfully or Failed to compress
+            HashMap<String,Character> mapToFile = treeFile.toMapReverse();
+            String mapToFileString=toString(mapToFile);
+            write(resultFileName+".map",mapToFileString);
+
+
             return "success";
+        }
+
+        public static String toString(HashMap<String,Character> map) {
+            String result="";
+            for (String key : map.keySet()) {
+                result=result+key+":"+map.get(key)+"\n";
+            }
+            return result;
         }
 
         public static void decomp(Scanner scanner) {
@@ -98,9 +121,9 @@ public class Main extends Application {
         }
 
         public static String decomp(String sourceFileName, String resultFileName) {
+            HashMap<String,Character> map = toMap(sourceFileName+".map");
             String text = read(sourceFileName);
-            ASCIIToBin(text);
-
+            write(resultFileName, ASCIIToBin(text));
             return "success";
         }
 
@@ -115,6 +138,17 @@ public class Main extends Application {
                 }
             }
             return binary.toString();
+        }
+
+        public static HashMap<String,Character> toMap(String sourceFileName) {
+            String file = read(sourceFileName);
+            HashMap<String,Character> map = new HashMap<String,Character>();
+            String[] lines = file.split("\n");
+            for (String line : lines) {
+                String[] keyValue = line.split(":");
+                map.put(keyValue[1],keyValue[0].charAt(0));
+            }
+            return map;
         }
 
         public static String size(Scanner scanner) {
@@ -182,21 +216,17 @@ public class Main extends Application {
         }
     }
 
-    class List {
+    static class List {
         LinkedList<Symbol> characterList = new LinkedList<Symbol>();
 
         public List(String Str) {
             for (int i = 0; i < Str.length(); i++) {
-                if (!this.characterList.contains(Str.charAt(i))) {
+                if (!characterList.contains(Str.charAt(i))) {
                     Symbol symb = new Symbol(Str.charAt(i), 1);
                     symb.count(Str);
                     this.characterList.add(symb);
                 }
             }
-        }
-
-        public void add(Symbol symbol) {
-            characterList.add(symbol);
         }
 
         public void sort() {
@@ -256,7 +286,7 @@ public class Main extends Application {
         }
     }
 
-    class Tree {
+    static class Tree {
         LinkedList<Node> tree = new LinkedList<Node>();
 
         public Tree(List lists) {
@@ -342,7 +372,7 @@ public class Main extends Application {
 
     }
 
-    class Node {
+    static class Node {
         boolean position; // false-left true-right
         int parent; // no parent, then -1
         Symbol sym;
@@ -409,7 +439,7 @@ public class Main extends Application {
 
     }
 
-    class File {
+    class FileData {
         public String size;
         public String name;
         public String path;
@@ -419,8 +449,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        File activeFile = new File();
-        File secondaryFile = new File();
+        FileData activeFile = new FileData();
+        FileData secondaryFile = new FileData();
 
         String statisticsPlaceholder = "Name: N/A\nExtension: N/A\nSize: N/A bytes\nPath: N/A";
 
@@ -547,7 +577,7 @@ public class Main extends Application {
         alert.show();
     }
 
-    private void statisticsButton(Stage primaryStage, File activeFile, File secondaryFile, String statisticsPlaceholder,
+    private void statisticsButton(Stage primaryStage, FileData activeFile, FileData secondaryFile, String statisticsPlaceholder,
             Text activeFileStatistics, TextField activeFileField, Text secondaryFileStatistics,
             TextField secondaryFileField, Text equality) {
         refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
@@ -598,7 +628,7 @@ public class Main extends Application {
         }
     }
 
-    static void refresh(File file, Text fileStatistics, String statisticsPlaceholder, String path) {
+    static void refresh(FileData file, Text fileStatistics, String statisticsPlaceholder, String path) {
         try {
             if (path.equals("")) {
                 fileStatistics.setText(statisticsPlaceholder);
