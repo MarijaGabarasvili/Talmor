@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -24,14 +27,14 @@ import javafx.stage.Stage;
 public class Main extends Application {
     class fileUtils {
 
-        static String read(String fileName) {
-            try {
+        static String read(String fileName){
+            try{
                 FileInputStream file = new FileInputStream(fileName);
                 byte[] buffer = new byte[file.available()];
                 file.read(buffer, 0, file.available());
                 file.close();
                 return new String(buffer);
-            } catch (Exception e) {
+            }catch(Exception e){
                 System.out.println(e);
                 return e.getMessage();
             }
@@ -58,6 +61,23 @@ public class Main extends Application {
         }
 
         public static String comp(String sourceFileName, String resultFileName) {
+            StringBuilder sb = new StringBuilder();
+
+            ByteBuffer sb1 = ByteBuffer.allocate(sb.length());
+            for (int i = 0; i < sb.length(); i += 8) {
+                if (i + 8 > sb.length()) {
+                    String strii = sb.substring(i, sb.length());
+                    sb1.put((byte) Integer.parseInt(strii, 2));
+                } else {
+                    String strii = sb.substring(i, i + 8);
+                    sb1.put((byte) Integer.parseInt(strii, 2));
+                }
+
+            }
+            sb1.rewind();
+            Charset cs = Charset.forName("UTF-8");
+            CharBuffer cb = cs.decode(sb1);
+            write(resultFileName, cb.toString());
             // TODO: implement this method
             // it needs to return Compressed successfully or Failed to compress
             // StringBuilder sb = new StringBuilder();
@@ -110,38 +130,26 @@ public class Main extends Application {
 
         public static String decomp(String sourceFileName, String resultFileName) {
             // TODO: implement this method
-            // it needs to return Decompressed successfully or Failed to decompress
+            String text = read(sourceFileName);
+            ASCIIToBin(text);
+            
+            
+            
+
             return "unimplemented";
         }
-
-        // public static void encodeData(Node root, String str, Map<Character, String>
-        // huffmanCode) {
-        // if (root == null) {
-        // return;
-        // }
-        // // checks if the node is a leaf node or not
-        // if (isLeaf(root)) {
-        // huffmanCode.put(root.ch, str.length() > 0 ? str : "1");
-        // }
-        // encodeData(root.left, str + '0', huffmanCode);
-        // encodeData(root.right, str + '1', huffmanCode);
-        // }
-
-        // public static int decodeData(Node root, int index, StringBuilder sb) {
-        // // checks if the root node is null or not
-        // if (root == null) {
-        // return index;
-        // }
-        // // checks if the node is a leaf node or not
-        // if (isLeaf(root)) {
-        // System.out.print(root.ch);
-        // return index;
-        // }
-        // index++;
-        // root = (sb.charAt(index) == '0') ? root.left : root.right;
-        // index = decodeData(root, index, sb);
-        // return index;
-        // }
+        public static String ASCIIToBin(String ASCII) {
+            byte[] bytes = ASCII.toString().getBytes();
+            StringBuilder binary = new StringBuilder();
+            for (byte b : bytes) {
+                int val = b;
+                for (int i = 0; i < 8; i++) {
+                    binary.append((val & 128) == 0 ? 0 : 1);
+                    val <<= 1;
+                }
+            }
+            return binary.toString();
+        }
 
         public static String size(Scanner scanner) {
             System.out.print("file name: ");
