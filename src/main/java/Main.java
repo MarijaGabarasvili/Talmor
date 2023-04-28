@@ -219,8 +219,34 @@ public class Main extends Application {
             }
             return map;
         }
+        
+        public HashMap<String,Character> toMapReverse(){
+            HashMap<String,Character> map = new HashMap<String,Character>();
+            for (int i = 0; i<this.tree.size(); i++){
+              String code="";
+              int j=i;
+              if(this.tree.get(i).sym.character!='\0'){
+                do{
+                    if(this.tree.get(j).position){
+                        code=code+"1";
+                    }else{
+                        code=code+"0";
+                    }
+                    j=this.tree.get(j).parent;
+                }while(this.tree.get(j).parent!=-1);
 
-    }
+                String codeFin="";
+                for(int k=code.length()-1; k>=0;k--){
+                    codeFin=codeFin+code.charAt(k);
+                }
+                map.put(codeFin,this.tree.get(i).sym.character);
+              }
+      
+        }
+        return map;
+  }
+
+}
 
     class Node {
         boolean position; // false-left true-right
