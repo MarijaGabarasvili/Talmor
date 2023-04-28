@@ -9,8 +9,10 @@ This project is built with JavaFX and Gradle. It is a simple file compression pr
 ## Dependencies
 
 Java 19.0.2
+
 Gradle 8.1.0
-JavaFX None yet, but will be added soon
+
+JavaFX 20
 
 ## Installation
 
