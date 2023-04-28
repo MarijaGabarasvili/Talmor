@@ -210,6 +210,7 @@ public class Main extends Application {
 
     class List {
         LinkedList<Symbol> characterList = new LinkedList<Symbol>();
+
         public void add(Symbol symbol) {
             characterList.add(symbol);
         }
@@ -256,9 +257,9 @@ public class Main extends Application {
         char character;
         int quant;
 
-        public Symbol(char c,int q){
-          this.character = c;
-          this.quant = q;
+        public Symbol(char c, int q) {
+            this.character = c;
+            this.quant = q;
         }
 
         public Integer count(String file) {
@@ -275,32 +276,33 @@ public class Main extends Application {
         LinkedList<Node> tree = new LinkedList<Node>();
 
         public void create(List lists) {
-            this.tree.add(new Node(false,-1,lists.characterList.get(0)));
-            int j=0;
-                  for(int i=1; i<lists.characterList.size();i++){
-              if(this.tree.get(j).sym.quant<lists.characterList.get(i).quant){
-                
-                this.tree.set(j,new Node(false,-1,this.tree.get(j).sym));
-                
-                this.tree.add(new Node(true, -1, lists.characterList.get(i)));
-                j=j+1;
-              }else{
-                
-                this.tree.set(j, new Node(true,-1,this.tree.get(j).sym));
-                
-                this.tree.add(new Node(false, -1, lists.characterList.get(i)));
-                j=j+1;
-              }
-              
-              this.tree.add(new Node(false, -1, new Symbol('\0' ,this.tree.get(j).sym.quant+this.tree.get(j-1).sym.quant)));
-              
-              this.tree.set(j, new Node(this.tree.get(j).position, j+1, this.tree.get(j).sym));
-              
-              this.tree.set(j-1, new Node(this.tree.get(j-1).position, j+1, this.tree.get(j-1).sym));
-              j=j+1;
+            this.tree.add(new Node(false, -1, lists.characterList.get(0)));
+            int j = 0;
+            for (int i = 1; i < lists.characterList.size(); i++) {
+                if (this.tree.get(j).sym.quant < lists.characterList.get(i).quant) {
+
+                    this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+
+                    this.tree.add(new Node(true, -1, lists.characterList.get(i)));
+                    j = j + 1;
+                } else {
+
+                    this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+
+                    this.tree.add(new Node(false, -1, lists.characterList.get(i)));
+                    j = j + 1;
+                }
+
+                this.tree.add(new Node(false, -1,
+                        new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j - 1).sym.quant)));
+
+                this.tree.set(j, new Node(this.tree.get(j).position, j + 1, this.tree.get(j).sym));
+
+                this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1, this.tree.get(j - 1).sym));
+                j = j + 1;
             }
-      
-          }
+
+        }
 
         public HashMap<Character, String> toMap() {
             HashMap<Character, String> map = new HashMap<Character, String>();

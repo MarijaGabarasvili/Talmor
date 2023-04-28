@@ -16,8 +16,6 @@ JavaFX 20
 
 ## Installation
 
-### Windows
-
 ```.\gradlew.bat```
 
 or

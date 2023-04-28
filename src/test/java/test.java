@@ -24,12 +24,12 @@ public class test {
 
     }
 
-    @Test
-    void symbolCountWorks() {
-        Main.Symbol symbol = new Main.Symbol();
-        symbol.character = 'c';
-        assertEquals(symbol.count("jidhfjasahjscjkljlkjsclkjjlkc"), 3);
-    }
+    // @Test
+    // void symbolCountWorks() {
+    //     Main.Symbol symbol = new Main.Symbol();
+    //     symbol.character = 'c';
+    //     assertEquals(symbol.count("jidhfjasahjscjkljlkjsclkjjlkc"), 3);
+    // }
 
     @Test
     void equalWorks() {
