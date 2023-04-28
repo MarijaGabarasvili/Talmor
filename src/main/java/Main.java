@@ -140,34 +140,35 @@ public class Main extends Application {
     class List {
         LinkedList<Symbol> characterList = new LinkedList<Symbol>();
 
-        public void add(Symbol symbol){
+        public void add(Symbol symbol) {
             characterList.add(symbol);
         }
-        public void sort(){
+
+        public void sort() {
             int position = 0;
-            for(int index=0; index<Math.floorDiv(characterList.size(), 2); index++){
+            for (int index = 0; index < Math.floorDiv(characterList.size(), 2); index++) {
                 position = makingsort(characterList, index, characterList.size());
-                if(position != index){
+                if (position != index) {
                     index = position;
-                } else{
+                } else {
                     index = position;
                 }
             }
         }
 
-        public Integer makingsort(LinkedList<Symbol> characterList, Integer index, Integer size){
+        public Integer makingsort(LinkedList<Symbol> characterList, Integer index, Integer size) {
             Symbol character;
             Symbol othercharacter;
             int position = index;
-            int leftpos = 2*index + 1;
-            int rightpos = 2*index + 2;
-            if((leftpos<size)&&(characterList(leftpos).quant<characterList(position).quant)){
+            int leftpos = 2 * index + 1;
+            int rightpos = 2 * index + 2;
+            if ((leftpos < size) && (characterList(leftpos).quant < characterList(position).quant)) {
                 position = leftpos;
-            } 
-            if((rightpos<size)&&(characterList(rightpos).quant<characterList(position).quant)){
+            }
+            if ((rightpos < size) && (characterList(rightpos).quant < characterList(position).quant)) {
                 position = rightpos;
             }
-            if(index != position){
+            if (index != position) {
                 character = characterList.get(position);
                 othercharacter = characterList.get(index);
                 characterList.remove(position);
@@ -175,7 +176,7 @@ public class Main extends Application {
                 characterList.add(index, character);
                 characterList.add(position, othercharacter);
                 return position;
-            } else{
+            } else {
                 return index;
             }
         }
@@ -255,34 +256,34 @@ public class Main extends Application {
             }
             return map;
         }
-        
-        public HashMap<String,Character> toMapReverse(){
-            HashMap<String,Character> map = new HashMap<String,Character>();
-            for (int i = 0; i<this.tree.size(); i++){
-              String code="";
-              int j=i;
-              if(this.tree.get(i).sym.character!='\0'){
-                do{
-                    if(this.tree.get(j).position){
-                        code=code+"1";
-                    }else{
-                        code=code+"0";
+
+        public HashMap<String, Character> toMapReverse() {
+            HashMap<String, Character> map = new HashMap<String, Character>();
+            for (int i = 0; i < this.tree.size(); i++) {
+                String code = "";
+                int j = i;
+                if (this.tree.get(i).sym.character != '\0') {
+                    do {
+                        if (this.tree.get(j).position) {
+                            code = code + "1";
+                        } else {
+                            code = code + "0";
+                        }
+                        j = this.tree.get(j).parent;
+                    } while (this.tree.get(j).parent != -1);
+
+                    String codeFin = "";
+                    for (int k = code.length() - 1; k >= 0; k--) {
+                        codeFin = codeFin + code.charAt(k);
                     }
-                    j=this.tree.get(j).parent;
-                }while(this.tree.get(j).parent!=-1);
-
-                String codeFin="";
-                for(int k=code.length()-1; k>=0;k--){
-                    codeFin=codeFin+code.charAt(k);
+                    map.put(codeFin, this.tree.get(i).sym.character);
                 }
-                map.put(codeFin,this.tree.get(i).sym.character);
-              }
-      
-        }
-        return map;
-  }
 
-}
+            }
+            return map;
+        }
+
+    }
 
     class Node {
         boolean position; // false-left true-right
@@ -408,7 +409,7 @@ public class Main extends Application {
         GridPane.setConstraints(equality, 2, 1);
         grid.getChildren().add(equality);
 
-        GridPane buttonGrid= new GridPane();
+        GridPane buttonGrid = new GridPane();
         buttonGrid.setVgap(5);
         buttonGrid.setHgap(5);
 
@@ -423,7 +424,7 @@ public class Main extends Application {
         buttonGrid.getChildren().add(compileButton);
 
         Button decompileButton = new Button("Decompile file");
-        
+
         decompileButton.setOnAction(actionEvent -> {
             decompileButton(activeFileField, secondaryFileField);
         });
@@ -442,7 +443,7 @@ public class Main extends Application {
         Button aboutButton = new Button("Credits");
         aboutButton.setOnMouseClicked(actionEvent -> {
             aboutButton();
-        }); 
+        });
         aboutButton.setOnAction(actionEvent -> {
             aboutButton();
         });
