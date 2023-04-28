@@ -79,7 +79,7 @@ public class Main extends Application {
             CharBuffer cb = cs.decode(sb1);
             write(resultFileName, cb.toString());
             // it needs to return Compressed successfully or Failed to compress
-            return "unimplemented";
+            return "success";
         }
 
         public static void decomp(Scanner scanner) {
@@ -94,7 +94,7 @@ public class Main extends Application {
             String text = read(sourceFileName);
             ASCIIToBin(text);
 
-            return "unimplemented";
+            return "success";
         }
 
         public static String ASCIIToBin(String ASCII) {

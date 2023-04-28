@@ -33,5 +33,12 @@ public class test {
         assertEquals(Main.fileUtils.read("src/test/java/test.txt"),"test text");
     }
 
+    @Test void compileAndDecompileWorks(){
+        Main.fileUtils.write("src/test/java/test.txt","test text");
+        assertEquals(Main.fileUtils.comp("src/test/java/test.txt","src/test/java/testc.txt"), "success");
+        assertEquals(Main.fileUtils.decomp("src/test/java/testc.txt","src/test/java/testd.txt"), "success");
+        assertEquals(Main.fileUtils.read("src/test/java/testd.txt"),"test text");
+    }
+
 
 }
