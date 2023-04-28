@@ -16,9 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -410,7 +408,7 @@ public class Main extends Application {
         String statisticsPlaceholder = "Name: N/A\nExtension: N/A\nSize: N/A bytes\nPath: N/A";
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(40, 10, 10, 10));
+        grid.setPadding(new Insets(30, 10, 10, 10));
         grid.setVgap(5);
         grid.setHgap(5);
 
@@ -451,65 +449,60 @@ public class Main extends Application {
         GridPane.setConstraints(equality, 2, 1);
         grid.getChildren().add(equality);
 
-        ToolBar toolBar = new ToolBar();
+        GridPane buttonGrid = new GridPane();
+        buttonGrid.setVgap(5);
+        buttonGrid.setHgap(5);
 
         Button compileButton = new Button("Compile file");
-        toolBar.getItems().add(compileButton);
-        Button decompileButton = new Button("Decompile file");
-        toolBar.getItems().add(decompileButton);
+        compileButton.setOnMouseClicked(actionEvent -> {
+            compileButton(activeFileField, secondaryFileField);
+        });
+        compileButton.setOnAction(actionEvent -> {
+            compileButton(activeFileField, secondaryFileField);
+        });
+        GridPane.setConstraints(compileButton, 0, 0);
+        buttonGrid.getChildren().add(compileButton);
 
-        toolBar.getItems().add(new Separator());
+        Button decompileButton = new Button("Decompile file");
+
+        decompileButton.setOnAction(actionEvent -> {
+            decompileButton(activeFileField, secondaryFileField);
+        });
+        GridPane.setConstraints(decompileButton, 1, 0);
+        buttonGrid.getChildren().add(decompileButton);
 
         Button statisticsButton = new Button("Refresh statistics");
-        toolBar.getItems().add(statisticsButton);
+        statisticsButton.setOnAction(actionEvent -> {
+            statisticsButton(primaryStage, activeFile, secondaryFile, statisticsPlaceholder, activeFileStatistics,
+                    activeFileField, secondaryFileStatistics, secondaryFileField, equality);
 
-        toolBar.getItems().add(new Separator());
+        });
+        GridPane.setConstraints(statisticsButton, 2, 0);
+        buttonGrid.getChildren().add(statisticsButton);
 
         Button aboutButton = new Button("Credits");
-        toolBar.getItems().add(aboutButton);
+        aboutButton.setOnMouseClicked(actionEvent -> {
+            aboutButton();
+        });
+        aboutButton.setOnAction(actionEvent -> {
+            aboutButton();
+        });
+        GridPane.setConstraints(aboutButton, 3, 0);
+        buttonGrid.getChildren().add(aboutButton);
 
-        toolBar.getItems().add(new Separator());
+        Button exitButton = new Button("Exit");
+        exitButton.setOnAction(actionEvent -> {
+            System.exit(0);
+        });
+        GridPane.setConstraints(exitButton, 4, 0);
+        buttonGrid.getChildren().add(exitButton);
 
-        Group root = new Group(toolBar, grid);
+        Group root = new Group(grid, buttonGrid);
         Scene scene = new Scene(root, Color.web("#416573"));
         primaryStage.setScene(scene);
         // Setting Title to the stage
         primaryStage.setTitle("Talmor compressor");
         // Displaying the contents of the stage
-
-        compileButton.setOnAction(actionEvent -> {
-            if (!activeFileField.getText().equals("")) {
-                try {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                            fileUtils.comp(activeFileField.getText(),
-                                    secondaryFileField.getText().equals("") ? activeFileField.getText() + ".talmor"
-                                            : secondaryFileField.getText()));
-                    alert.setHeaderText(null);
-                    alert.showAndWait();
-                } catch (Exception exeption) {
-                    exeption.printStackTrace();
-                }
-            }
-        });
-
-        decompileButton.setOnAction(actionEvent -> {
-            if (!activeFileField.getText().equals("")) {
-                try {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                            fileUtils.decomp(activeFileField.getText(),
-                                    secondaryFileField.getText().equals("")
-                                            ? activeFileField.getText().contains(".talmor")
-                                                    ? activeFileField.getText().substring(0,
-                                                            activeFileField.getText().length() - 7)
-                                                    : activeFileField.getText()
-                                            : secondaryFileField.getText()));
-                    alert.setHeaderText(null);
-                    alert.showAndWait();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-            }
-        });
 
         activeFileField.setOnKeyPressed(actionEvent -> {
             if (actionEvent.getCode() == KeyCode.ENTER) {
@@ -525,38 +518,67 @@ public class Main extends Application {
             }
         });
 
-        statisticsButton.setOnAction(actionEvent -> {
-            // System.out.println(fileUtils.size(activeFile.path));
-            refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
-            refresh(secondaryFile, secondaryFileStatistics, statisticsPlaceholder, secondaryFileField.getText());
-            try {
-                equality.setText(
-                        (!activeFileField.getText().equals("") && !secondaryFileField.getText().equals(""))
-                                ? fileUtils.equal(activeFile.path, secondaryFile.path) ? "Files are equal"
-                                        : "Files are not equal"
-                                : "Files are not equal");
-            } catch (Exception e) {
-                new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
-            }
-            primaryStage.sizeToScene();
-
-        });
-
-        aboutButton.setOnAction(actionEvent -> {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setContentText(fileUtils.about());
-            alert.setTitle("Credits");
-            alert.setHeaderText(null);
-            alert.show();
-        });
-
-        Button exitButton = new Button("Exit");
-        toolBar.getItems().add(exitButton);
-        exitButton.setOnAction(actionEvent -> {
-            System.exit(0);
-        });
-
         primaryStage.show();
+
+    }
+
+    private void aboutButton() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setContentText(fileUtils.about());
+        alert.setTitle("Credits");
+        alert.setHeaderText(null);
+        alert.show();
+    }
+
+    private void statisticsButton(Stage primaryStage, File activeFile, File secondaryFile, String statisticsPlaceholder,
+            Text activeFileStatistics, TextField activeFileField, Text secondaryFileStatistics,
+            TextField secondaryFileField, Text equality) {
+        refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
+        refresh(secondaryFile, secondaryFileStatistics, statisticsPlaceholder, secondaryFileField.getText());
+        try {
+            equality.setText(
+                    (!activeFileField.getText().equals("") && !secondaryFileField.getText().equals(""))
+                            ? fileUtils.equal(activeFile.path, secondaryFile.path) ? "Files are equal"
+                                    : "Files are not equal"
+                            : "Files are not equal");
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        }
+        primaryStage.sizeToScene();
+    }
+
+    private void decompileButton(TextField activeFileField, TextField secondaryFileField) {
+        if (!activeFileField.getText().equals("")) {
+            try {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                        fileUtils.decomp(activeFileField.getText(),
+                                secondaryFileField.getText().equals("")
+                                        ? activeFileField.getText().contains(".talmor")
+                                                ? activeFileField.getText().substring(0,
+                                                        activeFileField.getText().length() - 7)
+                                                : activeFileField.getText()
+                                        : secondaryFileField.getText()));
+                alert.setHeaderText(null);
+                alert.showAndWait();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    private void compileButton(TextField activeFileField, TextField secondaryFileField) {
+        if (!activeFileField.getText().equals("")) {
+            try {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                        fileUtils.comp(activeFileField.getText(),
+                                secondaryFileField.getText().equals("") ? activeFileField.getText() + ".talmor"
+                                        : secondaryFileField.getText()));
+                alert.setHeaderText(null);
+                alert.showAndWait();
+            } catch (Exception exeption) {
+                exeption.printStackTrace();
+            }
+        }
     }
 
     static void refresh(File file, Text fileStatistics, String statisticsPlaceholder, String path) {
