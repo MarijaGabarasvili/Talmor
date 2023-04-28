@@ -7,7 +7,6 @@
 plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
-    id 'java'
 }
 
 repositories {
@@ -31,14 +30,6 @@ dependencies {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(19)
-    }
-}
-
-jar{
-    manifest {
-        attributes(
-                'Main-Class': 'Main'
-        )
     }
 }
 
