@@ -1,40 +1,51 @@
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
 
 public class Main extends Application {
     class fileUtils {
 
-        static String read(String fileName) throws IOException {
-            FileInputStream file = new FileInputStream(fileName);
-            byte[] buffer = new byte[file.available()];
-            file.read(buffer, 0, file.available());
-            file.close();
-            return new String(buffer);
+        static String read(String fileName) {
+            try {
+                FileInputStream file = new FileInputStream(fileName);
+                byte[] buffer = new byte[file.available()];
+                file.read(buffer, 0, file.available());
+                file.close();
+                return new String(buffer);
+            } catch (Exception e) {
+                System.out.println(e);
+                return e.getMessage();
+            }
         }
 
-        static void write(String fileName,String file){
-            // TODO: implement this method
+        //
+        static void write(String fileName, String file) {
+            try {
+                FileWriter fw = new FileWriter(fileName);
+                fw.write(file + "\n");
+                fw.close();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
 
         public static void comp(Scanner scanner) {
@@ -49,6 +60,43 @@ public class Main extends Application {
         public static String comp(String sourceFileName, String resultFileName) {
             // TODO: implement this method
             // it needs to return Compressed successfully or Failed to compress
+            // StringBuilder sb = new StringBuilder();
+            // // loop iterate over the character array
+            // for (char c : text.toCharArray()) {
+            // // prints encoded string by getting characters
+            // sb.append(huffmanCode.get(c));
+            // }
+            // System.out.println("The encoded string is: " + sb);
+            // System.out.print("The decoded string is: ");
+            // if (isLeaf(root)) {
+            // // special case: For input like a, aa, aaa, etc.
+            // while (root.freq-- > 0) {
+            // System.out.print(root.ch);
+            // }
+            // } else {
+            // // traverse over the Huffman tree again and this time, decode the encoded
+            // string
+            // int index = -1;
+            // while (index < sb.length() - 1) {
+            // index = decodeData(root, index, sb);
+            // }
+            // }
+
+            // ByteBuffer sb1 = ByteBuffer.allocate(sb.length());
+            // for (int i = 0; i < sb.length(); i += 8) {
+            // if (i + 8 > sb.length()) {
+            // String strii = sb.substring(i, sb.length());
+            // sb1.put((byte) Integer.parseInt(strii, 2));
+            // } else {
+            // String strii = sb.substring(i, i + 8);
+            // sb1.put((byte) Integer.parseInt(strii, 2));
+            // }
+
+            // }
+            // sb1.rewind();
+            // Charset cs = Charset.forName("UTF-8");
+            // CharBuffer cb = cs.decode(sb1);
+            // System.out.println("\nASCII value of encoded string is: " + cb.toString());
             return "unimplemented";
         }
 
@@ -65,6 +113,35 @@ public class Main extends Application {
             // it needs to return Decompressed successfully or Failed to decompress
             return "unimplemented";
         }
+
+        // public static void encodeData(Node root, String str, Map<Character, String>
+        // huffmanCode) {
+        // if (root == null) {
+        // return;
+        // }
+        // // checks if the node is a leaf node or not
+        // if (isLeaf(root)) {
+        // huffmanCode.put(root.ch, str.length() > 0 ? str : "1");
+        // }
+        // encodeData(root.left, str + '0', huffmanCode);
+        // encodeData(root.right, str + '1', huffmanCode);
+        // }
+
+        // public static int decodeData(Node root, int index, StringBuilder sb) {
+        // // checks if the root node is null or not
+        // if (root == null) {
+        // return index;
+        // }
+        // // checks if the node is a leaf node or not
+        // if (isLeaf(root)) {
+        // System.out.print(root.ch);
+        // return index;
+        // }
+        // index++;
+        // root = (sb.charAt(index) == '0') ? root.left : root.right;
+        // index = decodeData(root, index, sb);
+        // return index;
+        // }
 
         public static String size(Scanner scanner) {
             System.out.print("file name: ");
@@ -127,7 +204,7 @@ public class Main extends Application {
         }
 
         public static String about() {
-            return "Marija Gabarašvili 17. grupa 221RDB236\nAnastasija Bakalova 17.grupa 221RDB324\nPāvels Pozdejevs 15. grupa 221RDB438\nDmitrijs Astrošaps 10.grupa 221RDB193\nLukas Pahomovs 14. grupa 221RDB047";
+            return "Marija Gabarašvili 17. grupa 221RDB326\nAnastasija Bakalova 17.grupa 221RDB324\nPāvels Pozdejevs 15. grupa 221RDB438\nDmitrijs Astrošaps 10.grupa 221RDB193\nLukas Pahomovs 14. grupa 221RDB047";
         }
     }
 
@@ -135,7 +212,44 @@ public class Main extends Application {
         LinkedList<Symbol> characterList = new LinkedList<Symbol>();
 
         public void add(Symbol symbol) {
-            // TODO: implement this method
+            characterList.add(symbol);
+        }
+
+        public void sort() {
+            int position = 0;
+            for (int index = 0; index < Math.floorDiv(characterList.size(), 2); index++) {
+                position = makingsort(characterList, index, characterList.size());
+                if (position != index) {
+                    index = position;
+                } else {
+                    index = position;
+                }
+            }
+        }
+
+        public Integer makingsort(LinkedList<Symbol> characterList, Integer index, Integer size) {
+            Symbol character;
+            Symbol othercharacter;
+            int position = index;
+            int leftpos = 2 * index + 1;
+            int rightpos = 2 * index + 2;
+            if ((leftpos < size) && (characterList.get(leftpos).quant < characterList.get(position).quant)) {
+                position = leftpos;
+            }
+            if ((rightpos < size) && (characterList.get(rightpos).quant < characterList.get(position).quant)) {
+                position = rightpos;
+            }
+            if (index != position) {
+                character = characterList.get(position);
+                othercharacter = characterList.get(index);
+                characterList.remove(position);
+                characterList.remove(characterList.get(index));
+                characterList.add(index, character);
+                characterList.add(position, othercharacter);
+                return position;
+            } else {
+                return index;
+            }
         }
     }
 
@@ -154,7 +268,8 @@ public class Main extends Application {
     }
 
     class Tree {
-		LinkedList<Node> tree = new LinkedList<Node>();
+        LinkedList<Node> tree = new LinkedList<Node>();
+
 
         // public void create(List lists) {
         //     this.tree.add(new Node(false, -1, lists.characterlist.get(0)));
@@ -163,23 +278,35 @@ public class Main extends Application {
         //      if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
 
         //     this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+            // this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
 
         //     this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
         //     j = j + 1;
         //     } else {
+            // this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
+            // j = j + 1;
+            // } else {
 
         //     this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+            // this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
 
         //      this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
         //     j = j + 1;
         //     }
+            // this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
+            // j = j + 1;
 
         //     this.tree.add(new Node(false, -1,
         //     new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
         //     1).sym.quant)));
+            // this.tree.add(new Node(false, -1,
+            // new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
+            // 1).sym.quant)));
 
         //     this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
         //     this.tree.get(j).sym));
+            // this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
+            // this.tree.get(j).sym));
 
         //     this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
         //     this.tree.get(j - 1).sym));
@@ -187,6 +314,10 @@ public class Main extends Application {
         //     }
 
         // }
+            // this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
+            // this.tree.get(j - 1).sym));
+            // j = j + 1;
+        }
 
 //   public HashMap<Character, String> toMap(){
 //     HashMap<Character, String> map = new HashMap<Character, String>();
@@ -202,6 +333,20 @@ public class Main extends Application {
 //             }
 //             j=this.tree.get(j).parent;
 //         }while(this.tree.get(j).parent!=-1);
+        public HashMap<Character, String> toMap() {
+            HashMap<Character, String> map = new HashMap<Character, String>();
+            for (int i = 0; i < this.tree.size(); i++) {
+                String code = "";
+                int j = i;
+                if (this.tree.get(i).sym.character != '\0') {
+                    do {
+                        if (this.tree.get(j).position) {
+                            code = code + "1";
+                        } else {
+                            code = code + "0";
+                        }
+                        j = this.tree.get(j).parent;
+                    } while (this.tree.get(j).parent != -1);
 
 //         String codeFin="";
 //         for(int k=code.length()-1; k>=0;k--){
@@ -215,11 +360,49 @@ public class Main extends Application {
 //   }
 	
 }
+                    String codeFin = "";
+                    for (int k = code.length() - 1; k >= 0; k--) {
+                        codeFin = codeFin + code.charAt(k);
+                    }
+                    map.put(this.tree.get(i).sym.character, codeFin);
+                }
 
-class Node {
-    boolean position; //false-left true-right
-    int parent; //no parent, then -1
-    Symbol sym;
+            }
+            return map;
+        }
+
+        public HashMap<String, Character> toMapReverse() {
+            HashMap<String, Character> map = new HashMap<String, Character>();
+            for (int i = 0; i < this.tree.size(); i++) {
+                String code = "";
+                int j = i;
+                if (this.tree.get(i).sym.character != '\0') {
+                    do {
+                        if (this.tree.get(j).position) {
+                            code = code + "1";
+                        } else {
+                            code = code + "0";
+                        }
+                        j = this.tree.get(j).parent;
+                    } while (this.tree.get(j).parent != -1);
+
+                    String codeFin = "";
+                    for (int k = code.length() - 1; k >= 0; k--) {
+                        codeFin = codeFin + code.charAt(k);
+                    }
+                    map.put(codeFin, this.tree.get(i).sym.character);
+                }
+
+            }
+            return map;
+        }
+
+    }
+
+    class Node {
+        boolean position; // false-left true-right
+        int parent; // no parent, then -1
+        Symbol sym;
 
         public Node(boolean pos, int p, Symbol s) {
             this.position = pos;
@@ -227,10 +410,12 @@ class Node {
             this.sym = s;
         }
 
-        public void print(){
-          System.out.println(this.position+" "+this.parent+" "+this.sym.character+" "+this.sym.quant+" aaa ");
+        public void print() {
+            System.out.println(
+                    this.position + " " + this.parent + " " + this.sym.character + " " + this.sym.quant + " aaa ");
         }
-}
+
+    }
 
     static String loop(String choise) {
         Scanner scanner = new Scanner(System.in);
@@ -298,7 +483,7 @@ class Node {
         String statisticsPlaceholder = "Name: N/A\nExtension: N/A\nSize: N/A bytes\nPath: N/A";
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(40, 10, 10, 10));
+        grid.setPadding(new Insets(30, 10, 10, 10));
         grid.setVgap(5);
         grid.setHgap(5);
 
@@ -339,65 +524,60 @@ class Node {
         GridPane.setConstraints(equality, 2, 1);
         grid.getChildren().add(equality);
 
-        ToolBar toolBar = new ToolBar();
+        GridPane buttonGrid = new GridPane();
+        buttonGrid.setVgap(5);
+        buttonGrid.setHgap(5);
 
         Button compileButton = new Button("Compile file");
-        toolBar.getItems().add(compileButton);
-        Button decompileButton = new Button("Decompile file");
-        toolBar.getItems().add(decompileButton);
+        compileButton.setOnMouseClicked(actionEvent -> {
+            compileButton(activeFileField, secondaryFileField);
+        });
+        compileButton.setOnAction(actionEvent -> {
+            compileButton(activeFileField, secondaryFileField);
+        });
+        GridPane.setConstraints(compileButton, 0, 0);
+        buttonGrid.getChildren().add(compileButton);
 
-        toolBar.getItems().add(new Separator());
+        Button decompileButton = new Button("Decompile file");
+
+        decompileButton.setOnAction(actionEvent -> {
+            decompileButton(activeFileField, secondaryFileField);
+        });
+        GridPane.setConstraints(decompileButton, 1, 0);
+        buttonGrid.getChildren().add(decompileButton);
 
         Button statisticsButton = new Button("Refresh statistics");
-        toolBar.getItems().add(statisticsButton);
+        statisticsButton.setOnAction(actionEvent -> {
+            statisticsButton(primaryStage, activeFile, secondaryFile, statisticsPlaceholder, activeFileStatistics,
+                    activeFileField, secondaryFileStatistics, secondaryFileField, equality);
 
-        toolBar.getItems().add(new Separator());
+        });
+        GridPane.setConstraints(statisticsButton, 2, 0);
+        buttonGrid.getChildren().add(statisticsButton);
 
         Button aboutButton = new Button("Credits");
-        toolBar.getItems().add(aboutButton);
+        aboutButton.setOnMouseClicked(actionEvent -> {
+            aboutButton();
+        });
+        aboutButton.setOnAction(actionEvent -> {
+            aboutButton();
+        });
+        GridPane.setConstraints(aboutButton, 3, 0);
+        buttonGrid.getChildren().add(aboutButton);
 
-        toolBar.getItems().add(new Separator());
+        Button exitButton = new Button("Exit");
+        exitButton.setOnAction(actionEvent -> {
+            System.exit(0);
+        });
+        GridPane.setConstraints(exitButton, 4, 0);
+        buttonGrid.getChildren().add(exitButton);
 
-        Group root = new Group(toolBar, grid);
+        Group root = new Group(grid, buttonGrid);
         Scene scene = new Scene(root, Color.web("#416573"));
         primaryStage.setScene(scene);
         // Setting Title to the stage
         primaryStage.setTitle("Talmor compressor");
         // Displaying the contents of the stage
-
-        compileButton.setOnAction(actionEvent -> {
-            if (!activeFileField.getText().equals("")) {
-                try {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                            fileUtils.comp(activeFileField.getText(),
-                                    secondaryFileField.getText().equals("") ? activeFileField.getText() + ".talmor"
-                                            : secondaryFileField.getText()));
-                    alert.setHeaderText(null);
-                    alert.showAndWait();
-                } catch (Exception exeption) {
-                    exeption.printStackTrace();
-                }
-            }
-        });
-
-        decompileButton.setOnAction(actionEvent -> {
-            if (!activeFileField.getText().equals("")) {
-                try {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                            fileUtils.decomp(activeFileField.getText(),
-                                    secondaryFileField.getText().equals("")
-                                            ? activeFileField.getText().contains(".talmor")
-                                                    ? activeFileField.getText().substring(0,
-                                                            activeFileField.getText().length() - 7)
-                                                    : activeFileField.getText()
-                                            : secondaryFileField.getText()));
-                    alert.setHeaderText(null);
-                    alert.showAndWait();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-            }
-        });
 
         activeFileField.setOnKeyPressed(actionEvent -> {
             if (actionEvent.getCode() == KeyCode.ENTER) {
@@ -413,38 +593,67 @@ class Node {
             }
         });
 
-        statisticsButton.setOnAction(actionEvent -> {
-            // System.out.println(fileUtils.size(activeFile.path));
-            refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
-            refresh(secondaryFile, secondaryFileStatistics, statisticsPlaceholder, secondaryFileField.getText());
-            try {
-                equality.setText(
-                        (!activeFileField.getText().equals("") && !secondaryFileField.getText().equals(""))
-                                ? fileUtils.equal(activeFile.path, secondaryFile.path) ? "Files are equal"
-                                        : "Files are not equal"
-                                : "Files are not equal");
-            } catch (Exception e) {
-                new Alert(AlertType.ERROR, e.getMessage()).showAndWait();
-            }
-            primaryStage.sizeToScene();
-
-        });
-
-        aboutButton.setOnAction(actionEvent -> {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setContentText(fileUtils.about());
-            alert.setTitle("Credits");
-            alert.setHeaderText(null);
-            alert.show();
-        });
-
-        Button exitButton = new Button("Exit");
-        toolBar.getItems().add(exitButton);
-        exitButton.setOnAction(actionEvent -> {
-            System.exit(0);
-        });
-
         primaryStage.show();
+
+    }
+
+    private void aboutButton() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setContentText(fileUtils.about());
+        alert.setTitle("Credits");
+        alert.setHeaderText(null);
+        alert.show();
+    }
+
+    private void statisticsButton(Stage primaryStage, File activeFile, File secondaryFile, String statisticsPlaceholder,
+            Text activeFileStatistics, TextField activeFileField, Text secondaryFileStatistics,
+            TextField secondaryFileField, Text equality) {
+        refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
+        refresh(secondaryFile, secondaryFileStatistics, statisticsPlaceholder, secondaryFileField.getText());
+        try {
+            equality.setText(
+                    (!activeFileField.getText().equals("") && !secondaryFileField.getText().equals(""))
+                            ? fileUtils.equal(activeFile.path, secondaryFile.path) ? "Files are equal"
+                                    : "Files are not equal"
+                            : "Files are not equal");
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        }
+        primaryStage.sizeToScene();
+    }
+
+    private void decompileButton(TextField activeFileField, TextField secondaryFileField) {
+        if (!activeFileField.getText().equals("")) {
+            try {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                        fileUtils.decomp(activeFileField.getText(),
+                                secondaryFileField.getText().equals("")
+                                        ? activeFileField.getText().contains(".talmor")
+                                                ? activeFileField.getText().substring(0,
+                                                        activeFileField.getText().length() - 7)
+                                                : activeFileField.getText()
+                                        : secondaryFileField.getText()));
+                alert.setHeaderText(null);
+                alert.showAndWait();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    private void compileButton(TextField activeFileField, TextField secondaryFileField) {
+        if (!activeFileField.getText().equals("")) {
+            try {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                        fileUtils.comp(activeFileField.getText(),
+                                secondaryFileField.getText().equals("") ? activeFileField.getText() + ".talmor"
+                                        : secondaryFileField.getText()));
+                alert.setHeaderText(null);
+                alert.showAndWait();
+            } catch (Exception exeption) {
+                exeption.printStackTrace();
+            }
+        }
     }
 
     static void refresh(File file, Text fileStatistics, String statisticsPlaceholder, String path) {
