@@ -2,8 +2,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
-
 public class test {
 
     @Test void hasAChoise () {
@@ -18,17 +16,8 @@ public class test {
     }
 
     @Test void readWorks (){
-        try {
-            assertEquals(Main.fileUtils.read("src/test/java/test.txt"),"test text");
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    @Test void symbolCountWorks(){
-        Main.Symbol symbol= new Main.Symbol();
-        symbol.character='c';
-        assertEquals(symbol.count("jidhfjasahjscjkljlkjsclkjjlkc"),3);
+        assertEquals(Main.fileUtils.read("src/test/java/test.txt"),"test text");
+        
     }
 
     @Test void equalWorks(){

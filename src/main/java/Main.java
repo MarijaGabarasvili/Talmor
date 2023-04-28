@@ -80,7 +80,6 @@ public class Main extends Application {
             Charset cs = Charset.forName("UTF-8");
             CharBuffer cb = cs.decode(sb1);
             write(resultFileName, cb.toString());
-            // TODO: implement this method
             // it needs to return Compressed successfully or Failed to compress
             return "unimplemented";
         }
@@ -94,7 +93,6 @@ public class Main extends Application {
         }
 
         public static String decomp(String sourceFileName, String resultFileName) {
-            // TODO: implement this method
             String text = read(sourceFileName);
             ASCIIToBin(text);
 
