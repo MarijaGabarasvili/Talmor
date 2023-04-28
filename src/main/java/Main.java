@@ -181,9 +181,45 @@ public class Main extends Application {
 
     class List {
         LinkedList<Symbol> characterList = new LinkedList<Symbol>();
-
         public void add(Symbol symbol) {
-            // TODO: implement this method
+            characterList.add(symbol);
+        }
+
+        public void sort() {
+            int position = 0;
+            for (int index = 0; index < Math.floorDiv(characterList.size(), 2); index++) {
+                position = makingsort(characterList, index, characterList.size());
+                if (position != index) {
+                    index = position;
+                } else {
+                    index = position;
+                }
+            }
+        }
+
+        public Integer makingsort(LinkedList<Symbol> characterList, Integer index, Integer size) {
+            Symbol character;
+            Symbol othercharacter;
+            int position = index;
+            int leftpos = 2 * index + 1;
+            int rightpos = 2 * index + 2;
+            if ((leftpos < size) && (characterList.get(leftpos).quant < characterList.get(position).quant)) {
+                position = leftpos;
+            }
+            if ((rightpos < size) && (characterList.get(rightpos).quant < characterList.get(position).quant)) {
+                position = rightpos;
+            }
+            if (index != position) {
+                character = characterList.get(position);
+                othercharacter = characterList.get(index);
+                characterList.remove(position);
+                characterList.remove(characterList.get(index));
+                characterList.add(index, character);
+                characterList.add(position, othercharacter);
+                return position;
+            } else {
+                return index;
+            }
         }
     }
 
