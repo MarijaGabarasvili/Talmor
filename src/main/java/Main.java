@@ -41,7 +41,7 @@ public class Main extends Application {
         static void write(String fileName, String file) {
             try {
                 FileWriter fw = new FileWriter(fileName);
-                fw.write(file + "\n");
+                fw.write(file);
                 fw.close();
             } catch (Exception e) {
                 System.out.println(e);

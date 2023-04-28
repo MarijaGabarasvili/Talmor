@@ -40,5 +40,10 @@ public class test {
     void notEqualWorks() {
         assertFalse(Main.fileUtils.equal("src/test/java/test.txt", "README.md"));
     }
+    @Test
+    void writeWorks() {
+        Main.fileUtils.write("src/test/java/testw.txt", "test text");
+        assertEquals(Main.fileUtils.read("src/test/java/testw.txt"), "test text");
+    }
 
 }
