@@ -24,12 +24,17 @@ import javafx.stage.Stage;
 public class Main extends Application {
     class fileUtils {
 
-        static String read(String fileName) throws IOException {
-            FileInputStream file = new FileInputStream(fileName);
-            byte[] buffer = new byte[file.available()];
-            file.read(buffer, 0, file.available());
-            file.close();
-            return new String(buffer);
+        static String read(String fileName)  {
+            try{
+                FileInputStream file = new FileInputStream(fileName);
+                byte[] buffer = new byte[file.available()];
+                file.read(buffer, 0, file.available());
+                file.close();
+                return new String(buffer);
+            }catch(Exception e){
+                System.out.println(e);
+                return e.getMessage();
+            }
         }
 
         //
@@ -55,6 +60,42 @@ public class Main extends Application {
         public static String comp(String sourceFileName, String resultFileName) {
             // TODO: implement this method
             // it needs to return Compressed successfully or Failed to compress
+            // StringBuilder sb = new StringBuilder();
+            // // loop iterate over the character array
+            // for (char c : text.toCharArray()) {
+            //     // prints encoded string by getting characters
+            //     sb.append(huffmanCode.get(c));
+            // }
+            // System.out.println("The encoded string is: " + sb);
+            // System.out.print("The decoded string is: ");
+            // if (isLeaf(root)) {
+            //     // special case: For input like a, aa, aaa, etc.
+            //     while (root.freq-- > 0) {
+            //         System.out.print(root.ch);
+            //     }
+            // } else {
+            //     // traverse over the Huffman tree again and this time, decode the encoded string
+            //     int index = -1;
+            //     while (index < sb.length() - 1) {
+            //         index = decodeData(root, index, sb);
+            //     }
+            // }
+
+            // ByteBuffer sb1 = ByteBuffer.allocate(sb.length());
+            // for (int i = 0; i < sb.length(); i += 8) {
+            //     if (i + 8 > sb.length()) {
+            //         String strii = sb.substring(i, sb.length());
+            //         sb1.put((byte) Integer.parseInt(strii, 2));
+            //     } else {
+            //         String strii = sb.substring(i, i + 8);
+            //         sb1.put((byte) Integer.parseInt(strii, 2));
+            //     }
+
+            // }
+            // sb1.rewind();
+            // Charset cs = Charset.forName("UTF-8");
+            // CharBuffer cb = cs.decode(sb1);
+            // System.out.println("\nASCII value of encoded string is: " + cb.toString());
             return "unimplemented";
         }
 
@@ -71,6 +112,35 @@ public class Main extends Application {
             // it needs to return Decompressed successfully or Failed to decompress
             return "unimplemented";
         }
+
+        // public static void encodeData(Node root, String str, Map<Character, String>
+        // huffmanCode) {
+        // if (root == null) {
+        // return;
+        // }
+        // // checks if the node is a leaf node or not
+        // if (isLeaf(root)) {
+        // huffmanCode.put(root.ch, str.length() > 0 ? str : "1");
+        // }
+        // encodeData(root.left, str + '0', huffmanCode);
+        // encodeData(root.right, str + '1', huffmanCode);
+        // }
+
+        // public static int decodeData(Node root, int index, StringBuilder sb) {
+        // // checks if the root node is null or not
+        // if (root == null) {
+        // return index;
+        // }
+        // // checks if the node is a leaf node or not
+        // if (isLeaf(root)) {
+        // System.out.print(root.ch);
+        // return index;
+        // }
+        // index++;
+        // root = (sb.charAt(index) == '0') ? root.left : root.right;
+        // index = decodeData(root, index, sb);
+        // return index;
+        // }
 
         public static String size(Scanner scanner) {
             System.out.print("file name: ");
@@ -215,7 +285,6 @@ public class Main extends Application {
 
             // this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
             // j = j + 1;
-            // }
 
             // this.tree.add(new Node(false, -1,
             // new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
@@ -227,8 +296,6 @@ public class Main extends Application {
             // this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
             // this.tree.get(j - 1).sym));
             // j = j + 1;
-            // }
-
         }
 
         public HashMap<Character, String> toMap() {
@@ -300,6 +367,7 @@ public class Main extends Application {
             System.out.println(
                     this.position + " " + this.parent + " " + this.sym.character + " " + this.sym.quant + " aaa ");
         }
+
     }
 
     static String loop(String choise) {
