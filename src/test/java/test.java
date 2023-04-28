@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class test {
@@ -29,8 +31,10 @@ public class test {
     }
 
     @Test void writeWorks(){
-        Main.fileUtils.write("src/test/java/test.txt","test text");
-        assertEquals(Main.fileUtils.read("src/test/java/test.txt"),"test text");
+        Main.fileUtils.write("src/test/java/testw.txt","test text");
+        assertEquals(Main.fileUtils.read("src/test/java/testw.txt"),"test text");
+        File file = new File("src/test/java/testw.txt");
+        if(file.delete()) System.out.println("file deleted");
     }
 
     @Test void compileAndDecompileWorks(){
