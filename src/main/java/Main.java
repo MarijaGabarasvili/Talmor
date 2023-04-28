@@ -24,14 +24,14 @@ import javafx.stage.Stage;
 public class Main extends Application {
     class fileUtils {
 
-        static String read(String fileName)  {
-            try{
+        static String read(String fileName) {
+            try {
                 FileInputStream file = new FileInputStream(fileName);
                 byte[] buffer = new byte[file.available()];
                 file.read(buffer, 0, file.available());
                 file.close();
                 return new String(buffer);
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
                 return e.getMessage();
             }
@@ -63,33 +63,34 @@ public class Main extends Application {
             // StringBuilder sb = new StringBuilder();
             // // loop iterate over the character array
             // for (char c : text.toCharArray()) {
-            //     // prints encoded string by getting characters
-            //     sb.append(huffmanCode.get(c));
+            // // prints encoded string by getting characters
+            // sb.append(huffmanCode.get(c));
             // }
             // System.out.println("The encoded string is: " + sb);
             // System.out.print("The decoded string is: ");
             // if (isLeaf(root)) {
-            //     // special case: For input like a, aa, aaa, etc.
-            //     while (root.freq-- > 0) {
-            //         System.out.print(root.ch);
-            //     }
+            // // special case: For input like a, aa, aaa, etc.
+            // while (root.freq-- > 0) {
+            // System.out.print(root.ch);
+            // }
             // } else {
-            //     // traverse over the Huffman tree again and this time, decode the encoded string
-            //     int index = -1;
-            //     while (index < sb.length() - 1) {
-            //         index = decodeData(root, index, sb);
-            //     }
+            // // traverse over the Huffman tree again and this time, decode the encoded
+            // string
+            // int index = -1;
+            // while (index < sb.length() - 1) {
+            // index = decodeData(root, index, sb);
+            // }
             // }
 
             // ByteBuffer sb1 = ByteBuffer.allocate(sb.length());
             // for (int i = 0; i < sb.length(); i += 8) {
-            //     if (i + 8 > sb.length()) {
-            //         String strii = sb.substring(i, sb.length());
-            //         sb1.put((byte) Integer.parseInt(strii, 2));
-            //     } else {
-            //         String strii = sb.substring(i, i + 8);
-            //         sb1.put((byte) Integer.parseInt(strii, 2));
-            //     }
+            // if (i + 8 > sb.length()) {
+            // String strii = sb.substring(i, sb.length());
+            // sb1.put((byte) Integer.parseInt(strii, 2));
+            // } else {
+            // String strii = sb.substring(i, i + 8);
+            // sb1.put((byte) Integer.parseInt(strii, 2));
+            // }
 
             // }
             // sb1.rewind();
