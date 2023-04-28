@@ -1,7 +1,9 @@
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -59,45 +61,24 @@ public class Main extends Application {
         }
 
         public static String comp(String sourceFileName, String resultFileName) {
-            // TODO: implement this method
+            StringBuilder sb = new StringBuilder();
+
+            ByteBuffer sb1 = ByteBuffer.allocate(sb.length());
+            for (int i = 0; i < sb.length(); i += 8) {
+                if (i + 8 > sb.length()) {
+                    String strii = sb.substring(i, sb.length());
+                    sb1.put((byte) Integer.parseInt(strii, 2));
+                } else {
+                    String strii = sb.substring(i, i + 8);
+                    sb1.put((byte) Integer.parseInt(strii, 2));
+                }
+
+            }
+            sb1.rewind();
+            Charset cs = Charset.forName("UTF-8");
+            CharBuffer cb = cs.decode(sb1);
+            write(resultFileName, cb.toString());
             // it needs to return Compressed successfully or Failed to compress
-            // StringBuilder sb = new StringBuilder();
-            // // loop iterate over the character array
-            // for (char c : text.toCharArray()) {
-            // // prints encoded string by getting characters
-            // sb.append(huffmanCode.get(c));
-            // }
-            // System.out.println("The encoded string is: " + sb);
-            // System.out.print("The decoded string is: ");
-            // if (isLeaf(root)) {
-            // // special case: For input like a, aa, aaa, etc.
-            // while (root.freq-- > 0) {
-            // System.out.print(root.ch);
-            // }
-            // } else {
-            // // traverse over the Huffman tree again and this time, decode the encoded
-            // string
-            // int index = -1;
-            // while (index < sb.length() - 1) {
-            // index = decodeData(root, index, sb);
-            // }
-            // }
-
-            // ByteBuffer sb1 = ByteBuffer.allocate(sb.length());
-            // for (int i = 0; i < sb.length(); i += 8) {
-            // if (i + 8 > sb.length()) {
-            // String strii = sb.substring(i, sb.length());
-            // sb1.put((byte) Integer.parseInt(strii, 2));
-            // } else {
-            // String strii = sb.substring(i, i + 8);
-            // sb1.put((byte) Integer.parseInt(strii, 2));
-            // }
-
-            // }
-            // sb1.rewind();
-            // Charset cs = Charset.forName("UTF-8");
-            // CharBuffer cb = cs.decode(sb1);
-            // System.out.println("\nASCII value of encoded string is: " + cb.toString());
             return "unimplemented";
         }
 
@@ -110,39 +91,24 @@ public class Main extends Application {
         }
 
         public static String decomp(String sourceFileName, String resultFileName) {
-            // TODO: implement this method
-            // it needs to return Decompressed successfully or Failed to decompress
+            String text = read(sourceFileName);
+            ASCIIToBin(text);
+
             return "unimplemented";
         }
 
-        // public static void encodeData(Node root, String str, Map<Character, String>
-        // huffmanCode) {
-        // if (root == null) {
-        // return;
-        // }
-        // // checks if the node is a leaf node or not
-        // if (isLeaf(root)) {
-        // huffmanCode.put(root.ch, str.length() > 0 ? str : "1");
-        // }
-        // encodeData(root.left, str + '0', huffmanCode);
-        // encodeData(root.right, str + '1', huffmanCode);
-        // }
-
-        // public static int decodeData(Node root, int index, StringBuilder sb) {
-        // // checks if the root node is null or not
-        // if (root == null) {
-        // return index;
-        // }
-        // // checks if the node is a leaf node or not
-        // if (isLeaf(root)) {
-        // System.out.print(root.ch);
-        // return index;
-        // }
-        // index++;
-        // root = (sb.charAt(index) == '0') ? root.left : root.right;
-        // index = decodeData(root, index, sb);
-        // return index;
-        // }
+        public static String ASCIIToBin(String ASCII) {
+            byte[] bytes = ASCII.toString().getBytes();
+            StringBuilder binary = new StringBuilder();
+            for (byte b : bytes) {
+                int val = b;
+                for (int i = 0; i < 8; i++) {
+                    binary.append((val & 128) == 0 ? 0 : 1);
+                    val <<= 1;
+                }
+            }
+            return binary.toString();
+        }
 
         public static String size(Scanner scanner) {
             System.out.print("file name: ");
@@ -205,7 +171,7 @@ public class Main extends Application {
         }
 
         public static String about() {
-            return "Marija Gabarašvili 17. grupa 221RDB326\nAnastasija Bakalova 17.grupa 221RDB324\nPāvels Pozdejevs 15. grupa 221RDB438\nDmitrijs Astrošaps 10.grupa 221RDB193\nLukas Pahomovs 14. grupa 221RDB047";
+            return "Marija Gabarašvili 17. grupa 221RDB236\nAnastasija Bakalova 17.grupa 221RDB324\nPāvels Pozdejevs 15. grupa 221RDB438\nDmitrijs Astrošaps 10.grupa 221RDB193\nLukas Pahomovs 14. grupa 221RDB047";
         }
     }
 
@@ -258,6 +224,11 @@ public class Main extends Application {
         char character;
         int quant;
 
+        public Symbol(char c, int q) {
+            this.character = c;
+            this.quant = q;
+        }
+
         public Integer count(String file) {
             for (int index = 0; index < file.length(); index++) {
                 if (file.charAt(index) == this.character) {
@@ -271,69 +242,35 @@ public class Main extends Application {
     class Tree {
         LinkedList<Node> tree = new LinkedList<Node>();
 
+        public void create(List lists) {
+            this.tree.add(new Node(false, -1, lists.characterList.get(0)));
+            int j = 0;
+            for (int i = 1; i < lists.characterList.size(); i++) {
+                if (this.tree.get(j).sym.quant < lists.characterList.get(i).quant) {
 
-        // public void create(List lists) {
-        //     this.tree.add(new Node(false, -1, lists.characterlist.get(0)));
-        //     int j = 0;
-        //     for (int i = 1; i < lists.characterlist.size(); i++) {
-        //      if (this.tree.get(j).sym.quant < lists.characterlist.get(i).quant) {
+                    this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
 
-        //     this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
-            // this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+                    this.tree.add(new Node(true, -1, lists.characterList.get(i)));
+                    j = j + 1;
+                } else {
 
-        //     this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
-        //     j = j + 1;
-        //     } else {
-            // this.tree.add(new Node(true, -1, lists.characterlist.get(i)));
-            // j = j + 1;
-            // } else {
+                    this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
 
-        //     this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
-            // this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+                    this.tree.add(new Node(false, -1, lists.characterList.get(i)));
+                    j = j + 1;
+                }
 
-        //      this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
-        //     j = j + 1;
-        //     }
-            // this.tree.add(new Node(false, -1, lists.characterlist.get(i)));
-            // j = j + 1;
+                this.tree.add(new Node(false, -1,
+                        new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j - 1).sym.quant)));
 
-        //     this.tree.add(new Node(false, -1,
-        //     new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
-        //     1).sym.quant)));
-            // this.tree.add(new Node(false, -1,
-            // new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j -
-            // 1).sym.quant)));
+                this.tree.set(j, new Node(this.tree.get(j).position, j + 1, this.tree.get(j).sym));
 
-        //     this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
-        //     this.tree.get(j).sym));
-            // this.tree.set(j, new Node(this.tree.get(j).position, j + 1,
-            // this.tree.get(j).sym));
+                this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1, this.tree.get(j - 1).sym));
+                j = j + 1;
+            }
 
-        //     this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
-        //     this.tree.get(j - 1).sym));
-        //     j = j + 1;
-        //     }
-
-        // }
-            // this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1,
-            // this.tree.get(j - 1).sym));
-            // j = j + 1;
         }
 
-//   public HashMap<Character, String> toMap(){
-//     HashMap<Character, String> map = new HashMap<Character, String>();
-//     for (int i = 0; i<this.tree.size(); i++){
-//       String code="";
-//       int j=i;
-//       if(this.tree.get(i).sym.character!='\0'){
-//         do{
-//             if(this.tree.get(j).position){
-//                 code=code+"1";
-//             }else{
-//                 code=code+"0";
-//             }
-//             j=this.tree.get(j).parent;
-//         }while(this.tree.get(j).parent!=-1);
         public HashMap<Character, String> toMap() {
             HashMap<Character, String> map = new HashMap<Character, String>();
             for (int i = 0; i < this.tree.size(); i++) {
@@ -349,18 +286,6 @@ public class Main extends Application {
                         j = this.tree.get(j).parent;
                     } while (this.tree.get(j).parent != -1);
 
-//         String codeFin="";
-//         for(int k=code.length()-1; k>=0;k--){
-//             codeFin=codeFin+code.charAt(k);
-//         }
-//         map.put(this.tree.get(i).sym.character, codeFin);
-//       }
-      
-//     }
-//     return map;
-//   }
-	
-}
                     String codeFin = "";
                     for (int k = code.length() - 1; k >= 0; k--) {
                         codeFin = codeFin + code.charAt(k);
@@ -405,16 +330,17 @@ public class Main extends Application {
         int parent; // no parent, then -1
         Symbol sym;
 
-    public Node(boolean pos, int p, Symbol s) {
-        this.position = pos;
-        this.parent = p;
-        this.sym = s;
-    }
-
-        public void print(){
-          System.out.println(this.position+" "+this.parent+" "+this.sym.character+" "+this.sym.quant+" aaa ");
+        public Node(boolean pos, int p, Symbol s) {
+            this.position = pos;
+            this.parent = p;
+            this.sym = s;
         }
-}
+
+        public void print() {
+            System.out.println(
+                    this.position + " " + this.parent + " " + this.sym.character + " " + this.sym.quant + " aaa ");
+        }
+    }
 
     static String loop(String choise) {
         Scanner scanner = new Scanner(System.in);
