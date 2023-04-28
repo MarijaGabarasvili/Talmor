@@ -162,17 +162,17 @@ public class Main extends Application {
             int position = index;
             int leftpos = 2 * index + 1;
             int rightpos = 2 * index + 2;
-            if ((leftpos < size) && (characterList(leftpos).quant < characterList(position).quant)) {
+            if ((leftpos < size) && (characterList.get(leftpos).quant < characterList.get(position).quant)) {
                 position = leftpos;
             }
-            if ((rightpos < size) && (characterList(rightpos).quant < characterList(position).quant)) {
+            if ((rightpos < size) && (characterList.get(rightpos).quant < characterList.get(position).quant)) {
                 position = rightpos;
             }
             if (index != position) {
                 character = characterList.get(position);
                 othercharacter = characterList.get(index);
                 characterList.remove(position);
-                characterList.remove(index);
+                characterList.remove(characterList.get(index));
                 characterList.add(index, character);
                 characterList.add(position, othercharacter);
                 return position;
