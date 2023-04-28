@@ -61,22 +61,29 @@ public class Main extends Application {
         }
 
         public static String comp(String sourceFileName, String resultFileName) {
-            StringBuilder sb = new StringBuilder();
+            String file = read(sourceFileName);
+            List listFile = new List(file);
+            Tree treeFile = new Tree(listFile);
+            HashMap<Character, String> map = treeFile.toMap();
+            String fileByte = "";
+            for (int i = 0; i < file.length(); i++) {
+                fileByte = fileByte + map.get(file.charAt(i));
+            }
 
-            ByteBuffer sb1 = ByteBuffer.allocate(sb.length());
-            for (int i = 0; i < sb.length(); i += 8) {
-                if (i + 8 > sb.length()) {
-                    String strii = sb.substring(i, sb.length());
-                    sb1.put((byte) Integer.parseInt(strii, 2));
+            ByteBuffer fileByte1 = ByteBuffer.allocate(fileByte.length());
+            for (int i = 0; i < fileByte.length(); i += 8) {
+                if (i + 8 > fileByte.length()) {
+                    String strii = fileByte.substring(i, fileByte.length());
+                    fileByte1.put((byte) Integer.parseInt(strii, 2));
                 } else {
-                    String strii = sb.substring(i, i + 8);
-                    sb1.put((byte) Integer.parseInt(strii, 2));
+                    String strii = fileByte.substring(i, i + 8);
+                    fileByte1.put((byte) Integer.parseInt(strii, 2));
                 }
 
             }
-            sb1.rewind();
+            fileByte1.rewind();
             Charset cs = Charset.forName("UTF-8");
-            CharBuffer cb = cs.decode(sb1);
+            CharBuffer cb = cs.decode(fileByte1);
             write(resultFileName, cb.toString());
             // it needs to return Compressed successfully or Failed to compress
             return "success";
@@ -178,6 +185,16 @@ public class Main extends Application {
     class List {
         LinkedList<Symbol> characterList = new LinkedList<Symbol>();
 
+        public List(String Str) {
+            for (int i = 0; i < Str.length(); i++) {
+                if (!this.characterList.contains(Str.charAt(i))) {
+                    Symbol symb = new Symbol(Str.charAt(i), 1);
+                    symb.count(Str);
+                    this.characterList.add(symb);
+                }
+            }
+        }
+
         public void add(Symbol symbol) {
             characterList.add(symbol);
         }
@@ -242,7 +259,7 @@ public class Main extends Application {
     class Tree {
         LinkedList<Node> tree = new LinkedList<Node>();
 
-        public void create(List lists) {
+        public Tree(List lists) {
             this.tree.add(new Node(false, -1, lists.characterList.get(0)));
             int j = 0;
             for (int i = 1; i < lists.characterList.size(); i++) {
