@@ -153,7 +153,7 @@ public class Main extends Application {
             String Bin = ASCIIToBin(text);
             String Bytefile = "";
             Bin = Bin.substring(0, len);
-            for (int i = 0;; i++) {
+            while (true) {
                 String str = "";
                 for (int j = 0;; j++) {
                     str = str + Bin.charAt(j);
@@ -191,9 +191,24 @@ public class Main extends Application {
             for (int i = 1; i < lines2.length; i++) {
                 lines[i - 1] = lines2[i];
             }
+            int i = 1;
             for (String line : lines) {
                 String[] keyValue = line.split(":");
-                map.put(keyValue[0], keyValue[1].charAt(0));
+                try {
+                    map.put(keyValue[0], keyValue[1].charAt(0));
+                } catch (Exception e) {
+                    if (line.isEmpty()) {
+                        // System.out.print(" 1 ");
+                    } else if (line.contains("::")) {
+                        map.put(keyValue[0], ':');
+                        // System.out.print(" 2 ");
+                    } else {
+                        map.put(keyValue[0], '\n');
+                        // System.out.print(" 3 ");
+                    }
+                    System.out.print(line);
+                }
+
             }
             return map;
         }
