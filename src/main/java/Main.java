@@ -41,9 +41,8 @@ public class Main extends Application {
             }
         }
 
-        //
         static void write(String fileName, String file) {
-            
+
             try {
                 File file1 = new File(fileName);
                 if (file1.createNewFile()) {
@@ -52,7 +51,26 @@ public class Main extends Application {
                     System.out.println("File already exists.");
                 }
                 FileWriter fw = new FileWriter(fileName);
-                fw.write(file);
+                fw.write(file.trim());
+                fw.close();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        static void writeComp(String fileName, char[] file) {
+
+            try {
+                File file1 = new File(fileName);
+                if (file1.createNewFile()) {
+                    System.out.println("File created: " + file1.getName());
+                } else {
+                    System.out.println("File already exists.");
+                }
+                FileWriter fw = new FileWriter(fileName);
+                for (int i = 0; i < file.length; i++) {
+                    fw.write(file[i]);
+                }
                 fw.close();
             } catch (Exception e) {
                 System.out.println(e);
@@ -78,8 +96,14 @@ public class Main extends Application {
             for (int i = 0; i < file.length(); i++) {
                 fileByte = fileByte + map.get(file.charAt(i));
             }
-
-            ByteBuffer fileByte1 = ByteBuffer.allocate(fileByte.length());
+            Charset cs = Charset.forName("ISO-8859-1");
+            int len = 0;
+            if (fileByte.length() % 8 != 0) {
+                len = fileByte.length() / 8 + 1;
+            } else {
+                len = fileByte.length() / 8;
+            }
+            ByteBuffer fileByte1 = ByteBuffer.allocate(len);
             for (int i = 0; i < fileByte.length(); i += 8) {
                 if (i + 8 > fileByte.length()) {
                     String strii = fileByte.substring(i, fileByte.length());
@@ -91,23 +115,21 @@ public class Main extends Application {
 
             }
             fileByte1.rewind();
-            Charset cs = Charset.forName("UTF-8");
             CharBuffer cb = cs.decode(fileByte1);
-            System.out.println(cb.toString());
-            write(resultFileName, cb.toString());
-            // it needs to return Compressed successfully or Failed to compress
-            HashMap<String,Character> mapToFile = treeFile.toMapReverse();
-            String mapToFileString=toString(mapToFile);
-            write(resultFileName+".map",mapToFileString);
 
+            writeComp(resultFileName, cb.array());
+            // it needs to return Compressed successfully or Failed to compress
+            HashMap<String, Character> mapToFile = treeFile.toMapReverse();
+            String mapToFileString = toString(mapToFile, fileByte.length());
+            write(resultFileName + ".map", mapToFileString);
 
             return "success";
         }
 
-        public static String toString(HashMap<String,Character> map) {
-            String result="";
+        public static String toString(HashMap<String, Character> map, int len) {
+            String result = String.valueOf(len) + "\n";
             for (String key : map.keySet()) {
-                result=result+key+":"+map.get(key)+"\n";
+                result = result + key + ":" + map.get(key) + "\n";
             }
             return result;
         }
@@ -121,34 +143,63 @@ public class Main extends Application {
         }
 
         public static String decomp(String sourceFileName, String resultFileName) {
-            HashMap<String,Character> map = toMap(sourceFileName+".map");
+            HashMap<String, Character> map = toMap(sourceFileName + ".map");
+            int len = MapLen(sourceFileName + ".map");
             String text = read(sourceFileName);
-            write(resultFileName, ASCIIToBin(text));
+            String Bin = ASCIIToBin(text);
+            String Bytefile = "";
+            Bin = Bin.substring(0, len);
+            while(true) {
+                String str = "";
+                for (int j = 0;; j++) {
+                    str = str + Bin.charAt(j);
+                    if (map.containsKey(str)) {
+                        Bytefile = Bytefile + map.get(str);
+                        Bin = Bin.substring(j + 1);
+                        break;
+                    }
+                }
+                if (Bin.length() == 0) {
+                    break;
+                }
+
+            }
+
+            write(resultFileName, Bytefile);
+
             return "success";
         }
 
         public static String ASCIIToBin(String ASCII) {
-            byte[] bytes = ASCII.toString().getBytes();
-            StringBuilder binary = new StringBuilder();
-            for (byte b : bytes) {
-                int val = b;
-                for (int i = 0; i < 8; i++) {
-                    binary.append((val & 128) == 0 ? 0 : 1);
-                    val <<= 1;
-                }
+            byte arr[] = ASCII.getBytes(Charset.forName("ISO-8859-1"));
+            String s = "";
+            for (int i = 0; i < arr.length; i++) {
+                s = s + String.format("%8s", Integer.toBinaryString(arr[i] & 0xFF)).replace(' ', '0');
             }
-            return binary.toString();
+            return s;
         }
 
-        public static HashMap<String,Character> toMap(String sourceFileName) {
+        public static HashMap<String, Character> toMap(String sourceFileName) {
             String file = read(sourceFileName);
-            HashMap<String,Character> map = new HashMap<String,Character>();
-            String[] lines = file.split("\n");
+            HashMap<String, Character> map = new HashMap<String, Character>();
+            String[] lines2 = file.split("\n");
+            String[] lines = new String[lines2.length - 1];
+            for (int i = 1; i < lines2.length; i++) {
+                lines[i - 1] = lines2[i];
+            }
             for (String line : lines) {
                 String[] keyValue = line.split(":");
-                map.put(keyValue[1],keyValue[0].charAt(0));
+                map.put(keyValue[0], keyValue[1].charAt(0));
             }
             return map;
+        }
+
+        public static Integer MapLen(String sourceFileName) {
+            String file = read(sourceFileName);
+            // HashMap<String, Character> map = new HashMap<String, Character>();
+            String[] lines2 = file.split("\n");
+            String line = lines2[0];
+            return Integer.parseInt(line);
         }
 
         public static String size(Scanner scanner) {
@@ -216,58 +267,51 @@ public class Main extends Application {
         }
     }
 
-    static class List {
+    public static class List {
         LinkedList<Symbol> characterList = new LinkedList<Symbol>();
 
         public List(String Str) {
             for (int i = 0; i < Str.length(); i++) {
-                if (!characterList.contains(Str.charAt(i))) {
-                    Symbol symb = new Symbol(Str.charAt(i), 1);
-                    symb.count(Str);
+                Symbol symb = new Symbol(Str.charAt(i), 0);
+                symb.count(Str);
+                boolean tru = true;
+                for (int j = 0; j < this.characterList.size(); j++) {
+                    if (this.characterList.get(j).character == Str.charAt(i)) {
+                        tru = false;
+                    }
+                }
+                if (tru) {
                     this.characterList.add(symb);
                 }
             }
         }
 
         public void sort() {
-            int position = 0;
-            for (int index = 0; index < Math.floorDiv(characterList.size(), 2); index++) {
-                position = makingsort(characterList, index, characterList.size());
-                if (position != index) {
-                    index = position;
-                } else {
-                    index = position;
-                }
-            }
-        }
+            for (int i = 1; i < characterList.size(); i++) {
+                Symbol character = new Symbol(this.characterList.get(i).character, this.characterList.get(i).quant);
+                int a = i;
+                while (a != 0) {
+                    int position = a - 1;
+                    if (character.quant < this.characterList.get(position).quant) {
 
-        public Integer makingsort(LinkedList<Symbol> characterList, Integer index, Integer size) {
-            Symbol character;
-            Symbol othercharacter;
-            int position = index;
-            int leftpos = 2 * index + 1;
-            int rightpos = 2 * index + 2;
-            if ((leftpos < size) && (characterList.get(leftpos).quant < characterList.get(position).quant)) {
-                position = leftpos;
-            }
-            if ((rightpos < size) && (characterList.get(rightpos).quant < characterList.get(position).quant)) {
-                position = rightpos;
-            }
-            if (index != position) {
-                character = characterList.get(position);
-                othercharacter = characterList.get(index);
-                characterList.remove(position);
-                characterList.remove(characterList.get(index));
-                characterList.add(index, character);
-                characterList.add(position, othercharacter);
-                return position;
-            } else {
-                return index;
+                        Symbol othercharacter = new Symbol(this.characterList.get(position).character,
+                                this.characterList.get(position).quant);
+                        this.characterList.remove(a);
+                        this.characterList.remove(position);
+                        this.characterList.add(a - 1, othercharacter);
+                        this.characterList.add(position, character);
+                        character = this.characterList.get(position);
+                        a = a - 1;
+                        // startposition = a;
+                    } else {
+                        a = a - 1;
+                    }
+                }
             }
         }
     }
 
-    static class Symbol {
+    public static class Symbol {
         char character;
         int quant;
 
@@ -286,7 +330,7 @@ public class Main extends Application {
         }
     }
 
-    static class Tree {
+    public static class Tree {
         LinkedList<Node> tree = new LinkedList<Node>();
 
         public Tree(List lists) {
@@ -367,6 +411,9 @@ public class Main extends Application {
                 }
 
             }
+            // for (int i = 0; i < this.tree.size(); i++){
+            // this.tree.get(i).print();
+            // }
             return map;
         }
 
@@ -458,8 +505,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        
 
         FileData activeFile = new FileData();
         FileData secondaryFile = new FileData();
@@ -589,7 +634,8 @@ public class Main extends Application {
         alert.show();
     }
 
-    private void statisticsButton(Stage primaryStage, FileData activeFile, FileData secondaryFile, String statisticsPlaceholder,
+    private void statisticsButton(Stage primaryStage, FileData activeFile, FileData secondaryFile,
+            String statisticsPlaceholder,
             Text activeFileStatistics, TextField activeFileField, Text secondaryFileStatistics,
             TextField secondaryFileField, Text equality) {
         refresh(activeFile, activeFileStatistics, statisticsPlaceholder, activeFileField.getText());
