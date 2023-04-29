@@ -427,9 +427,19 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        // gui version
-        launch(args);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter 'gui' to run GUI version or 'terminal' to run terminal version");
+        String choise = scanner.nextLine();
 
+        if (choise.equals("gui")) {
+            scanner.close();
+        } else {
+            System.out.println(loop(""));
+            scanner.close();
+            return;
+        }
+
+        launch(args);
         // terminal version
         // try {
         // System.out.println(loop(""));
@@ -448,6 +458,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        
 
         FileData activeFile = new FileData();
         FileData secondaryFile = new FileData();
