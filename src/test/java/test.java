@@ -44,5 +44,14 @@ public class test {
         assertEquals(Main.fileUtils.read("src/test/java/testd.txt"),"test text");
     }
 
-
+    @Test void compileAndDecompileWorks1(){
+        assertEquals(Main.fileUtils.comp("File1.html","File1.dat"), "success");
+        assertEquals(Main.fileUtils.decomp("File1.dat","File1c.html"), "success");
+        assertTrue(Main.fileUtils.equal("File1.html", "File1c.html"));
+    }
+    @Test void compileAndDecompileWorks2(){
+        assertEquals(Main.fileUtils.comp("File2.html","File2.dat"), "success");
+        assertEquals(Main.fileUtils.decomp("File2.dat","File2c.html"), "success");
+        assertTrue(Main.fileUtils.equal("File2.html", "File2c.html"));
+    }
 }
