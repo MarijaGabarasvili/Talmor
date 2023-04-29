@@ -107,6 +107,10 @@ public class Main extends Application {
             for (int i = 0; i < fileByte.length(); i += 8) {
                 if (i + 8 > fileByte.length()) {
                     String strii = fileByte.substring(i, fileByte.length());
+                    for (int j = strii.length(); j < 8; j++) {
+                        strii = strii + "0";
+                    }
+                    System.out.println(strii);
                     fileByte1.put((byte) Integer.parseInt(strii, 2));
                 } else {
                     String strii = fileByte.substring(i, i + 8);
@@ -149,7 +153,7 @@ public class Main extends Application {
             String Bin = ASCIIToBin(text);
             String Bytefile = "";
             Bin = Bin.substring(0, len);
-            while(true) {
+            for (int i = 0;; i++) {
                 String str = "";
                 for (int j = 0;; j++) {
                     str = str + Bin.charAt(j);
@@ -440,7 +444,7 @@ public class Main extends Application {
         Scanner scanner = new Scanner(System.in);
         Boolean test = !(choise.equals(""));
 
-        loop: while (true) {
+        while (true) {
 
             if (!test)
                 choise = scanner.next();
@@ -462,28 +466,29 @@ public class Main extends Application {
                     System.out.print(fileUtils.about());
                     break;
                 case "exit":
-                    break loop;
+                    scanner.close();
+                    System.exit(0);
             }
 
             choise = test ? "exit" : "";
         }
-
-        scanner.close();
-        return "Run finished successfully";
     }
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter 'gui' to run GUI version or 'terminal' to run terminal version");
-        String choise = scanner.nextLine();
 
+        String choise = "gui";
+        if (scanner.hasNextLine()) {
+            choise = scanner.nextLine();
+        }
         if (choise.equals("gui")) {
             scanner.close();
         } else {
             System.out.println(loop(""));
             scanner.close();
-            return;
+            System.exit(0);
         }
 
         launch(args);
