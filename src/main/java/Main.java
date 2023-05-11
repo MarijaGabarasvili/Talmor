@@ -191,7 +191,7 @@ public class Main extends Application {
             for (int i = 1; i < lines2.length; i++) {
                 lines[i - 1] = lines2[i];
             }
-            int i = 1;
+            // int i = 1;
             for (String line : lines) {
                 String[] keyValue = line.split(":");
                 try {
@@ -531,7 +531,7 @@ public class Main extends Application {
             if (choise.equals("gui")) {
                 scanner.close();
                 launch(args);
-                
+
             } else {
                 System.out.println(loop(""));
                 scanner.close();
