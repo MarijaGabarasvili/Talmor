@@ -530,13 +530,15 @@ public class Main extends Application {
             }
             if (choise.equals("gui")) {
                 scanner.close();
+                launch(args);
+                
             } else {
                 System.out.println(loop(""));
                 scanner.close();
                 System.exit(0);
             }
 
-            launch(args);
+            
             // terminal version
             // try {
             // System.out.println(loop(""));

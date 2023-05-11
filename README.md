@@ -24,11 +24,11 @@ or
 
 ## Usage
 
-```.\gradlew.bat run```
+```.\gradlew.bat --console plain run```
 
 or
 
-```./gradlew run```
+```./gradlew --console plain run```
 
 ### Miscellaneous
 
