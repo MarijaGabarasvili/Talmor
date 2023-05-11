@@ -524,7 +524,7 @@ public class Main extends Application {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter 'gui' to run GUI version or 'terminal' to run terminal version");
 
-            String choise = "gui";
+            String choise = "";
             if (scanner.hasNextLine()) {
                 choise = scanner.nextLine();
             }
