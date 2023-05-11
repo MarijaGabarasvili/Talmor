@@ -306,8 +306,8 @@ public class Main extends Application {
         }
 
         public void sort() {
-            int low=0;
-            int high=this.characterList.size()-1;
+            int low = 0;
+            int high = this.characterList.size() - 1;
             quickSort(low, high);
 
             // for (int i = 1; i < characterList.size(); i++) {
@@ -336,12 +336,12 @@ public class Main extends Application {
         }
 
         public void quickSort(int low, int high) {
-        if (low < high) {
-            int pi = partition(low, high);
-            quickSort(low, pi - 1);
-            quickSort(pi + 1, high);
+            if (low < high) {
+                int pi = partition(low, high);
+                quickSort(low, pi - 1);
+                quickSort(pi + 1, high);
+            }
         }
-    }
 
         private int partition(int low, int high) {
             int pivot = this.characterList.get(high).quant;
@@ -358,195 +358,195 @@ public class Main extends Application {
             this.characterList.set(i + 1, this.characterList.get(high));
             this.characterList.set(high, temp);
             return i + 1;
-            }
         }
-        public static class Symbol {
-            char character;
-            int quant;
+    }
 
-            public Symbol(char c, int q) {
-                this.character = c;
-                this.quant = q;
-            }
+    public static class Symbol {
+        char character;
+        int quant;
 
-            public Integer count(String file) {
-                for (int index = 0; index < file.length(); index++) {
-                    if (file.charAt(index) == this.character) {
-                        this.quant++;
-                    }
+        public Symbol(char c, int q) {
+            this.character = c;
+            this.quant = q;
+        }
+
+        public Integer count(String file) {
+            for (int index = 0; index < file.length(); index++) {
+                if (file.charAt(index) == this.character) {
+                    this.quant++;
                 }
-                return this.quant;
             }
+            return this.quant;
         }
+    }
 
-        public static class Tree {
-            LinkedList<Node> tree = new LinkedList<Node>();
+    public static class Tree {
+        LinkedList<Node> tree = new LinkedList<Node>();
 
-            public Tree(List lists) {
-                this.tree.add(new Node(false, -1, lists.characterList.get(0)));
-                int j = 0;
-                for (int i = 1; i < lists.characterList.size(); i++) {
-                    if (this.tree.get(j).sym.quant < lists.characterList.get(i).quant) {
+        public Tree(List lists) {
+            this.tree.add(new Node(false, -1, lists.characterList.get(0)));
+            int j = 0;
+            for (int i = 1; i < lists.characterList.size(); i++) {
+                if (this.tree.get(j).sym.quant < lists.characterList.get(i).quant) {
 
-                        this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
+                    this.tree.set(j, new Node(false, -1, this.tree.get(j).sym));
 
-                        this.tree.add(new Node(true, -1, lists.characterList.get(i)));
-                        j = j + 1;
-                    } else {
+                    this.tree.add(new Node(true, -1, lists.characterList.get(i)));
+                    j = j + 1;
+                } else {
 
-                        this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
+                    this.tree.set(j, new Node(true, -1, this.tree.get(j).sym));
 
-                        this.tree.add(new Node(false, -1, lists.characterList.get(i)));
-                        j = j + 1;
-                    }
-
-                    this.tree.add(new Node(false, -1,
-                            new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j - 1).sym.quant)));
-
-                    this.tree.set(j, new Node(this.tree.get(j).position, j + 1, this.tree.get(j).sym));
-
-                    this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1, this.tree.get(j - 1).sym));
+                    this.tree.add(new Node(false, -1, lists.characterList.get(i)));
                     j = j + 1;
                 }
 
+                this.tree.add(new Node(false, -1,
+                        new Symbol('\0', this.tree.get(j).sym.quant + this.tree.get(j - 1).sym.quant)));
+
+                this.tree.set(j, new Node(this.tree.get(j).position, j + 1, this.tree.get(j).sym));
+
+                this.tree.set(j - 1, new Node(this.tree.get(j - 1).position, j + 1, this.tree.get(j - 1).sym));
+                j = j + 1;
             }
 
-            public HashMap<Character, String> toMap() {
-                HashMap<Character, String> map = new HashMap<Character, String>();
-                for (int i = 0; i < this.tree.size(); i++) {
-                    String code = "";
-                    int j = i;
-                    if (this.tree.get(i).sym.character != '\0') {
-                        do {
-                            if (this.tree.get(j).position) {
-                                code = code + "1";
-                            } else {
-                                code = code + "0";
-                            }
-                            j = this.tree.get(j).parent;
-                        } while (this.tree.get(j).parent != -1);
+        }
 
-                        String codeFin = "";
-                        for (int k = code.length() - 1; k >= 0; k--) {
-                            codeFin = codeFin + code.charAt(k);
+        public HashMap<Character, String> toMap() {
+            HashMap<Character, String> map = new HashMap<Character, String>();
+            for (int i = 0; i < this.tree.size(); i++) {
+                String code = "";
+                int j = i;
+                if (this.tree.get(i).sym.character != '\0') {
+                    do {
+                        if (this.tree.get(j).position) {
+                            code = code + "1";
+                        } else {
+                            code = code + "0";
                         }
-                        map.put(this.tree.get(i).sym.character, codeFin);
+                        j = this.tree.get(j).parent;
+                    } while (this.tree.get(j).parent != -1);
+
+                    String codeFin = "";
+                    for (int k = code.length() - 1; k >= 0; k--) {
+                        codeFin = codeFin + code.charAt(k);
                     }
-
+                    map.put(this.tree.get(i).sym.character, codeFin);
                 }
-                return map;
+
             }
+            return map;
+        }
 
-            public HashMap<String, Character> toMapReverse() {
-                HashMap<String, Character> map = new HashMap<String, Character>();
-                for (int i = 0; i < this.tree.size(); i++) {
-                    String code = "";
-                    int j = i;
-                    if (this.tree.get(i).sym.character != '\0') {
-                        do {
-                            if (this.tree.get(j).position) {
-                                code = code + "1";
-                            } else {
-                                code = code + "0";
-                            }
-                            j = this.tree.get(j).parent;
-                        } while (this.tree.get(j).parent != -1);
-
-                        String codeFin = "";
-                        for (int k = code.length() - 1; k >= 0; k--) {
-                            codeFin = codeFin + code.charAt(k);
+        public HashMap<String, Character> toMapReverse() {
+            HashMap<String, Character> map = new HashMap<String, Character>();
+            for (int i = 0; i < this.tree.size(); i++) {
+                String code = "";
+                int j = i;
+                if (this.tree.get(i).sym.character != '\0') {
+                    do {
+                        if (this.tree.get(j).position) {
+                            code = code + "1";
+                        } else {
+                            code = code + "0";
                         }
-                        map.put(codeFin, this.tree.get(i).sym.character);
+                        j = this.tree.get(j).parent;
+                    } while (this.tree.get(j).parent != -1);
+
+                    String codeFin = "";
+                    for (int k = code.length() - 1; k >= 0; k--) {
+                        codeFin = codeFin + code.charAt(k);
                     }
-
-                }
-                // for (int i = 0; i < this.tree.size(); i++){
-                // this.tree.get(i).print();
-                // }
-                return map;
-            }
-
-        }
-
-        static class Node {
-            boolean position; // false-left true-right
-            int parent; // no parent, then -1
-            Symbol sym;
-
-            public Node(boolean pos, int p, Symbol s) {
-                this.position = pos;
-                this.parent = p;
-                this.sym = s;
-            }
-
-            public void print() {
-                System.out.println(
-                        this.position + " " + this.parent + " " + this.sym.character + " " + this.sym.quant + " aaa ");
-            }
-        }
-
-        static String loop(String choise) {
-            Scanner scanner = new Scanner(System.in);
-            Boolean test = !(choise.equals(""));
-
-            while (true) {
-
-                if (!test)
-                    choise = scanner.next();
-
-                switch (choise) {
-                    case "comp":
-                        fileUtils.comp(scanner);
-                        break;
-                    case "decomp":
-                        fileUtils.decomp(scanner);
-                        break;
-                    case "size":
-                        System.out.println(fileUtils.size(scanner));
-                        break;
-                    case "equal":
-                        System.out.println(fileUtils.equal(scanner));
-                        break;
-                    case "about":
-                        System.out.print(fileUtils.about());
-                        break;
-                    case "exit":
-                        scanner.close();
-                        System.exit(0);
+                    map.put(codeFin, this.tree.get(i).sym.character);
                 }
 
-                choise = test ? "exit" : "";
             }
-        }
-
-        public static void main(String[] args) {
-
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter 'gui' to run GUI version or 'terminal' to run terminal version");
-
-            String choise = "";
-            if (scanner.hasNextLine()) {
-                choise = scanner.nextLine();
-            }
-            if (choise.equals("gui")) {
-                scanner.close();
-                launch(args);
-
-            } else {
-                System.out.println(loop(""));
-                scanner.close();
-                System.exit(0);
-            }
-
-            
-            // terminal version
-            // try {
-            // System.out.println(loop(""));
-            // } catch (Exception exeption) {
-            // System.out.println(exeption.getMessage());
+            // for (int i = 0; i < this.tree.size(); i++){
+            // this.tree.get(i).print();
             // }
-
+            return map;
         }
+
+    }
+
+    static class Node {
+        boolean position; // false-left true-right
+        int parent; // no parent, then -1
+        Symbol sym;
+
+        public Node(boolean pos, int p, Symbol s) {
+            this.position = pos;
+            this.parent = p;
+            this.sym = s;
+        }
+
+        public void print() {
+            System.out.println(
+                    this.position + " " + this.parent + " " + this.sym.character + " " + this.sym.quant + " aaa ");
+        }
+    }
+
+    static String loop(String choise) {
+        Scanner scanner = new Scanner(System.in);
+        Boolean test = !(choise.equals(""));
+
+        while (true) {
+
+            if (!test)
+                choise = scanner.next();
+
+            switch (choise) {
+                case "comp":
+                    fileUtils.comp(scanner);
+                    break;
+                case "decomp":
+                    fileUtils.decomp(scanner);
+                    break;
+                case "size":
+                    System.out.println(fileUtils.size(scanner));
+                    break;
+                case "equal":
+                    System.out.println(fileUtils.equal(scanner));
+                    break;
+                case "about":
+                    System.out.print(fileUtils.about());
+                    break;
+                case "exit":
+                    scanner.close();
+                    System.exit(0);
+            }
+
+            choise = test ? "exit" : "";
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter 'gui' to run GUI version or 'terminal' to run terminal version");
+
+        String choise = "";
+        if (scanner.hasNextLine()) {
+            choise = scanner.nextLine();
+        }
+        if (choise.equals("gui")) {
+            scanner.close();
+            launch(args);
+
+        } else {
+            System.out.println(loop(""));
+            scanner.close();
+            System.exit(0);
+        }
+
+        // terminal version
+        // try {
+        // System.out.println(loop(""));
+        // } catch (Exception exeption) {
+        // System.out.println(exeption.getMessage());
+        // }
+
+    }
 
     class FileData {
         public String size;

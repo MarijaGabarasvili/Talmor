@@ -33,6 +33,14 @@ java {
     }
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'Main'
+        )
+    }
+}
+
 mainClassName = 'Main'
 
 tasks.named('test') {
